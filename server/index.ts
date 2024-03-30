@@ -5,6 +5,9 @@ import express, { Express } from 'express';
 // import errorMiddleware from '../middleware/error';
 import dotenv from 'dotenv';
 
+import testNatural from './text-processing/test';
+testNatural();
+
 dotenv.config();
 
 const app: Express = express();
@@ -28,6 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 // app.use(errorMiddleware);
 
 app.get('/', (_req, res) => {
+  // res.send(testNatural());
   res.send('It works');
 });
 
