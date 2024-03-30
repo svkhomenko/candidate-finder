@@ -39,6 +39,31 @@ const countIDFObject = (wordSet: Array<string>, documentWordArr: Array<Array<str
   return IDFObject;
 };
 
+function filterNullVectors(
+  documentWordArr: Array<Array<string>>,
+  termDocumentMatrix: Array<Array<number>>,
+) {
+  const nullVectorIndexes = [];
+
+  const filteredTermDocumentMatrix = termDocumentMatrix.filter((vector, index) => {
+    if (vector.every((word) => word === 0)) {
+      nullVectorIndexes.push(index);
+      return false;
+    }
+    return true;
+  });
+
+  const filteredDocumentWordArr = documentWordArr.filter(
+    (_d, index) => !nullVectorIndexes.includes(index),
+  );
+
+  return {
+    filteredTermDocumentMatrix,
+    nullVectorIndexes,
+    filteredDocumentWordArr,
+  };
+}
+
 const getTermDocumentMatrix = (documentWordArr: Array<Array<string>>) => {
   const wordSet = getWordSet(documentWordArr);
   console.log(wordSet);
@@ -56,7 +81,7 @@ const getTermDocumentMatrix = (documentWordArr: Array<Array<string>>) => {
     termDocumentMatrix.push(documentTFIDF);
   }
 
-  return termDocumentMatrix;
+  return filterNullVectors(documentWordArr, termDocumentMatrix);
 };
 
 export default {
