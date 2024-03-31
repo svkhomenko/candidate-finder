@@ -13,3 +13,10 @@ model Resume {
 
   @@map("resume")
 }
+
+model Vacancy {
+  id            Int      @id @default(autoincrement())
+  description   String   @db.Text
+
+  @@map("vacancy")
+}
