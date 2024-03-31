@@ -1,12 +1,12 @@
 import express, { Express } from 'express';
 // import cors from 'cors';
 // import cookieParser from 'cookie-parser';
-// import router from '../routes';
-// import errorMiddleware from '../middleware/error';
+import router from './routes';
+import errorMiddleware from './middleware/error';
 import dotenv from 'dotenv';
 
-import testNatural from './text-processing/test';
-testNatural();
+// import testNatural from './text-processing/test';
+// testNatural();
 
 dotenv.config();
 
@@ -26,14 +26,14 @@ app.use(express.urlencoded({ extended: true }));
 //   }),
 // );
 
-// app.use(router);
+app.use(router);
 
-// app.use(errorMiddleware);
+app.use(errorMiddleware);
 
-app.get('/', (_req, res) => {
-  // res.send(testNatural());
-  res.send('It works');
-});
+// app.get('/', (_req, res) => {
+//   // res.send(testNatural());
+//   res.send('It works');
+// });
 
 app.listen(process.env.SERVER_PORT, () => {
   return console.log(`Server is listening at http://localhost:${process.env.SERVER_PORT}`);
