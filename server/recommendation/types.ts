@@ -9,4 +9,10 @@ export type IProcessedDocument = {
   textArr: string[];
   type: 'resume' | 'vacancy';
   index: number;
+  recommendatedResumes?: Array<IRecommendatedResume>;
+};
+
+export type IRecommendatedResume = {
+  id: number;
+  ratingScore: number;
 };

@@ -1,4 +1,5 @@
 import prisma from '../lib/prisma';
+import ClientError from '../types/error';
 
 const vacancy = prisma.vacancy;
 
@@ -10,6 +11,16 @@ const VacancyService = {
         description: true,
       },
     });
+    return found;
+  },
+
+  async findOneOrThrow(id: number) {
+    const found = await vacancy.findFirst({
+      where: { id },
+    });
+    if (!found) {
+      throw new ClientError('The vacancy is not found.', 404);
+    }
     return found;
   },
 };

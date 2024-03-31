@@ -4,8 +4,10 @@ import textProcessing from './text-processing';
 import kmeans from './clusterization/k-mean';
 import ClientError from '../types/error';
 import { RESUME, VACANCY } from '../consts/const';
-import { IDocument, IProcessedDocument } from './types';
+import { IDocument, IProcessedDocument, IRecommendatedResume } from './types';
 import { IKmeanResult } from './clusterization/k-mean';
+import cosineSimilarity from './clusterization/cosine-similarity';
+import { Resume, Vacancy } from '@prisma/client';
 
 async function getAllDocuments(): Promise<Array<IDocument>> {
   let resumes = await ResumeService.getAllDescriptions();
@@ -41,18 +43,8 @@ class Recommendations {
     this.kmeansResult = kmeans(this.termDocumentMatrix, this.k);
   }
 
-  getRecommendatedResumesIds(vacancyId: number) {
-    let i = this.documents.findIndex(
-      (document) => document.id === vacancyId && document.type === VACANCY,
-    );
-    if (i === -1) {
-      throw new ClientError(`No such vacancy in recommendation found`, 404);
-    }
-    if (this.documents[i].index === -1) {
-      throw new ClientError(`Provide full description to find recommendation`, 400);
-    }
-
-    let clusterIndex = this.kmeansResult.clusterIndexes[this.documents[i].index];
+  getRecommendatedResumesDocuments(vacancyIndex: number) {
+    let clusterIndex = this.kmeansResult.clusterIndexes[this.documents[vacancyIndex].index];
 
     let indexesFromCluster = [];
     for (let indexFromC = 0; indexFromC < this.kmeansResult.clusterIndexes.length; indexFromC++) {
@@ -65,7 +57,61 @@ class Recommendations {
       (document) => indexesFromCluster.includes(document.index) && document.type === RESUME,
     );
 
-    return resumesDocuments.map((document) => document.id);
+    return resumesDocuments;
+  }
+
+  countRatingScore(
+    vacancy: Vacancy,
+    vacancyIndex: number,
+    resumesDocuments: Array<IProcessedDocument>,
+    resume: Resume,
+  ) {
+    const vectorVacancy = this.termDocumentMatrix[this.documents[vacancyIndex].index];
+    const resumeIndex = resumesDocuments.findIndex((document) => document.id === resume.id);
+    const vectorResume = this.termDocumentMatrix[this.documents[resumeIndex].index];
+
+    const cosSimilarity = 1 - cosineSimilarity(vectorVacancy, vectorResume);
+
+    return cosSimilarity;
+  }
+
+  async getRecommendatedResumes(vacancyId: number) {
+    let vacancyIndex = this.documents.findIndex(
+      (document) => document.id === vacancyId && document.type === VACANCY,
+    );
+    if (vacancyIndex === -1) {
+      throw new ClientError(`No such vacancy in recommendation found`, 404);
+    }
+    if (this.documents[vacancyIndex].index === -1) {
+      throw new ClientError(`Provide full description to find recommendation`, 400);
+    }
+
+    if (this.documents[vacancyIndex].recommendatedResumes) {
+      return this.documents[vacancyIndex].recommendatedResumes;
+    }
+
+    const vacancy = await VacancyService.findOneOrThrow(this.documents[vacancyIndex].id);
+
+    const resumesDocuments = this.getRecommendatedResumesDocuments(vacancyIndex);
+    const resumesIds = resumesDocuments.map((document) => document.id);
+    const resumes = await ResumeService.getAllResumesById(resumesIds);
+
+    const recommendatedResumes: Array<IRecommendatedResume> = [];
+
+    for (let resume of resumes) {
+      const ratingScore = this.countRatingScore(vacancy, vacancyIndex, resumesDocuments, resume);
+      recommendatedResumes.push({
+        id: resume.id,
+        ratingScore: ratingScore,
+      });
+    }
+
+    recommendatedResumes.sort(function (resumeA, resumeB) {
+      return resumeA.ratingScore - resumeB.ratingScore;
+    });
+
+    this.documents[vacancyIndex].recommendatedResumes = recommendatedResumes;
+    return recommendatedResumes;
   }
 }
 
