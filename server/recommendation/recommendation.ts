@@ -67,8 +67,8 @@ class Recommendations {
     resume: Resume,
   ) {
     const vectorVacancy = this.termDocumentMatrix[this.documents[vacancyIndex].index];
-    const resumeIndex = resumesDocuments.findIndex((document) => document.id === resume.id);
-    const vectorResume = this.termDocumentMatrix[this.documents[resumeIndex].index];
+    const resumeDocument = resumesDocuments.find((document) => document.id === resume.id);
+    const vectorResume = this.termDocumentMatrix[resumeDocument.index];
 
     const cosSimilarity = 1 - cosineSimilarity(vectorVacancy, vectorResume);
 
@@ -163,6 +163,8 @@ class Recommendations {
     this.documents = result.documents;
     this.termDocumentMatrix = result.termDocumentMatrix;
     this.kmeansResult = kmeans(this.termDocumentMatrix, this.k);
+    console.log(this.documents);
+    console.log(this.kmeansResult);
   }
 }
 
