@@ -10,6 +10,10 @@ function tokeniseAndStemmed(test: string) {
   return tokenizedTextArr.map((word) => natural.PorterStemmerUk.stem(word));
 }
 
+function getTermDocumentMatrix(processedDocuments: Array<IProcessedDocument>) {
+  return TFIDF.getTermDocumentMatrix(processedDocuments);
+}
+
 function textProcessing(documents: Array<IDocument>) {
   let processedDocuments: Array<IProcessedDocument> = documents.map((document, index) => ({
     id: document.id,
@@ -18,7 +22,8 @@ function textProcessing(documents: Array<IDocument>) {
     index,
   }));
 
-  return TFIDF.getTermDocumentMatrix(processedDocuments);
+  return getTermDocumentMatrix(processedDocuments);
 }
 
 export default textProcessing;
+export { tokeniseAndStemmed, getTermDocumentMatrix };

@@ -1,10 +1,10 @@
 import ResumeService from '../services/resume';
 import VacancyService from '../services/vacancy';
-import textProcessing from './text-processing';
+import textProcessing, { tokeniseAndStemmed, getTermDocumentMatrix } from './text-processing';
 import kmeans from './clusterization/k-mean';
 import ClientError from '../types/error';
 import { RESUME, VACANCY } from '../consts/const';
-import { IDocument, IProcessedDocument, IRecommendatedResume } from './types';
+import { IDocument, IProcessedDocument, IRecommendatedResume, IDocumentType } from './types';
 import { IKmeanResult } from './clusterization/k-mean';
 import cosineSimilarity from './clusterization/cosine-similarity';
 import { Resume, Vacancy } from '@prisma/client';
@@ -112,6 +112,57 @@ class Recommendations {
 
     this.documents[vacancyIndex].recommendatedResumes = recommendatedResumes;
     return recommendatedResumes;
+  }
+
+  handleCreate(document: Resume | Vacancy, documentType: IDocumentType) {
+    let docs = this.documents.map((doc, index) => {
+      doc.recommendatedResumes = undefined;
+      doc.index = index;
+      return doc;
+    });
+
+    docs.push({
+      id: document.id,
+      textArr: tokeniseAndStemmed(document.description),
+      type: documentType,
+      index: docs.length,
+    });
+
+    this.updateClassFields(docs);
+  }
+
+  handleUpdate(document: Resume | Vacancy, documentType: IDocumentType) {
+    let docs = this.documents.map((doc, index) => {
+      doc.recommendatedResumes = undefined;
+      doc.index = index;
+      if (doc.id === document.id && doc.type === documentType) {
+        doc.textArr = tokeniseAndStemmed(document.description);
+      }
+      return doc;
+    });
+
+    this.updateClassFields(docs);
+  }
+
+  handleDelete(document: Resume | Vacancy, documentType: IDocumentType) {
+    let docs = this.documents.filter(
+      (doc) => !(doc.id === document.id && doc.type === documentType),
+    );
+
+    docs = docs.map((doc, index) => {
+      doc.recommendatedResumes = undefined;
+      doc.index = index;
+      return doc;
+    });
+
+    this.updateClassFields(docs);
+  }
+
+  updateClassFields(docs: Array<IProcessedDocument>) {
+    let result = getTermDocumentMatrix(docs);
+    this.documents = result.documents;
+    this.termDocumentMatrix = result.termDocumentMatrix;
+    this.kmeansResult = kmeans(this.termDocumentMatrix, this.k);
   }
 }
 

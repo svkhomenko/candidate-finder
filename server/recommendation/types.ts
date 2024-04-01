@@ -1,13 +1,15 @@
+export type IDocumentType = 'resume' | 'vacancy';
+
 export type IDocument = {
   id: number;
   description: string;
-  type: 'resume' | 'vacancy';
+  type: IDocumentType;
 };
 
 export type IProcessedDocument = {
   id: number;
   textArr: string[];
-  type: 'resume' | 'vacancy';
+  type: IDocumentType;
   index: number;
   recommendatedResumes?: Array<IRecommendatedResume>;
 };

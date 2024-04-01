@@ -3,6 +3,7 @@ import prisma from '../lib/prisma';
 import VacancyService from '../services/vacancy';
 import recommendations from '../recommendation/recommendation';
 import { getPageOptions } from '../utils/query-options';
+import { VACANCY } from '../consts/const';
 
 const vacancy = prisma.vacancy;
 const resume = prisma.resume;
@@ -13,6 +14,8 @@ const createVacancy = async (req: Request, res: Response) => {
   const newVacancy = await vacancy.create({
     data: data,
   });
+
+  recommendations.handleCreate(newVacancy, VACANCY);
 
   res.status(201).json(newVacancy);
 };
@@ -64,6 +67,8 @@ const updateVacancy = async (req: Request, res: Response) => {
     data,
   });
 
+  recommendations.handleCreate(updatedVacancy, VACANCY);
+
   res.status(201).json(updatedVacancy);
 };
 
@@ -72,9 +77,11 @@ const deleteVacancy = async (req: Request, res: Response) => {
 
   await VacancyService.findOneOrThrow(vacancyId);
 
-  await vacancy.delete({
+  const deletedVacancy = await vacancy.delete({
     where: { id: vacancyId },
   });
+
+  recommendations.handleCreate(deletedVacancy, VACANCY);
 
   res.status(204).send();
 };
