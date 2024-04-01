@@ -9,9 +9,11 @@ const resume = prisma.resume;
 
 const createVacancy = async (req: Request, res: Response) => {
   const data = req.body;
+
   const newVacancy = await vacancy.create({
     data: data,
   });
+
   res.status(201).json(newVacancy);
 };
 
@@ -51,4 +53,30 @@ const getVacancyRecommendation = async (req: Request, res: Response) => {
   res.json(result);
 };
 
-export { createVacancy, getVacancyRecommendation };
+const updateVacancy = async (req: Request, res: Response) => {
+  const data = req.body;
+  const vacancyId = Number(req.params.id);
+
+  await VacancyService.findOneOrThrow(vacancyId);
+
+  const updatedVacancy = await vacancy.update({
+    where: { id: vacancyId },
+    data,
+  });
+
+  res.status(201).json(updatedVacancy);
+};
+
+const deleteVacancy = async (req: Request, res: Response) => {
+  const vacancyId = Number(req.params.id);
+
+  await VacancyService.findOneOrThrow(vacancyId);
+
+  await vacancy.delete({
+    where: { id: vacancyId },
+  });
+
+  res.status(204).send();
+};
+
+export { createVacancy, getVacancyRecommendation, updateVacancy, deleteVacancy };
