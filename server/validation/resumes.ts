@@ -8,4 +8,8 @@ const createSchema = Joi.object().keys({
     .max(RESUME_DESCRIPTION_LENGTH.max),
 });
 
-export { createSchema };
+const updateSchema = Joi.object().keys({
+  description: Joi.string().min(RESUME_DESCRIPTION_LENGTH.min).max(RESUME_DESCRIPTION_LENGTH.max),
+});
+
+export { createSchema, updateSchema };

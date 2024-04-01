@@ -1,4 +1,5 @@
 import prisma from '../lib/prisma';
+import ClientError from '../types/error';
 
 const resume = prisma.resume;
 
@@ -22,6 +23,16 @@ const ResumeService = {
       },
     });
     return resumes;
+  },
+
+  async findOneOrThrow(id: number) {
+    const found = await resume.findFirst({
+      where: { id },
+    });
+    if (!found) {
+      throw new ClientError('The resume is not found.', 404);
+    }
+    return found;
   },
 };
 
