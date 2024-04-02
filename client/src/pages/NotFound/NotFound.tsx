@@ -4,13 +4,9 @@ import PageAlert from '~/components/PageAlert';
 
 const NotFound = () => {
   return (
-    <PageAlert
-      status="warning"
-      title="404 - Page not found!"
-      message="Whoops, the page you are looking for was not found."
-    >
+    <PageAlert status="warning" title="404 - Сторінка не знайдена!" message="Цієї сторінки не існує">
       <Button colorScheme="orange" as={RouterLink} to="/">
-        Go home
+        На головну
       </Button>
     </PageAlert>
   );
