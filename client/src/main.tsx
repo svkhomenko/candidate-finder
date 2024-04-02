@@ -5,6 +5,7 @@ import App from './App';
 import theme from './styles/theme';
 import '@fontsource/inter';
 import { BrowserRouter } from 'react-router-dom';
+import './styles/index.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
