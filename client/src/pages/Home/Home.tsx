@@ -1,5 +1,7 @@
 import VacancyCardList from '~/components/VacancyCardList';
 import Container from '~/components/Container';
+import VacancySearch from '~/components/VacancySearch/VacancySearch';
+// import VacancyFilters from '~/components/VacancySearch/VacancyFilters';
 
 const data = [
   {
@@ -70,9 +72,13 @@ const data = [
 
 const Home = () => {
   return (
-    <Container>
-      <VacancyCardList vacancies={data} />
-    </Container>
+    <>
+      <VacancySearch />
+      <Container>
+        {/* <VacancyFilters /> */}
+        <VacancyCardList vacancies={data} />
+      </Container>
+    </>
   );
 };
 
