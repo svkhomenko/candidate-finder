@@ -17,8 +17,8 @@ import { Link as ReactRouterLink, NavLink, useNavigate } from 'react-router-dom'
 import styles from './header.styles';
 
 const links = [
-  { href: '/', label: 'Events' },
-  { href: '/companies', label: 'Companies' },
+  { href: '/', label: 'Резюме' },
+  { href: '/vacancies', label: 'Вакансії' },
 ];
 
 const Header = () => {
@@ -71,8 +71,8 @@ const Header = () => {
         </Box>
         <Box>
           <ReactRouterLink to="/">
-            <Heading size="xl" color="secondary" lineHeight="1">
-              Uevent
+            <Heading size="lg" color="secondary" lineHeight="1">
+              Candidate Finder
             </Heading>
           </ReactRouterLink>
         </Box>
