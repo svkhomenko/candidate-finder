@@ -10,3 +10,8 @@ export type Vacancy = {
   location: string;
   contract: Contract;
 };
+
+export type RecomendedResume = Vacancy & {
+  ratingScore: number;
+  badges: Array<string>;
+};
