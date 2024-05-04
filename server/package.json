@@ -21,9 +21,11 @@
   },
   "dependencies": {
     "@prisma/client": "^5.11.0",
+    "@types/joi-phone-number": "^5.0.8",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "joi": "^17.12.2",
+    "joi-phone-number": "^5.1.1",
     "natural": "^6.12.0"
   }
 }
