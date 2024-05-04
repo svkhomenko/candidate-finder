@@ -7,6 +7,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id          Int      @id @default(autoincrement())
+  email       String   @unique @db.VarChar(255)
+  password    String   @db.Char(60)
+  fullName    String   @map("full_name") @db.VarChar(255)
+  role        UserRole
+  phoneNumber String   @map("phone_number") @db.VarChar(255)
+  isConfirmed Boolean  @default(false) @map("is_confirmed")
+
+  // resumes     Resume[]
+  // vacancies   Vacancy[]
+
+  @@map("user")
+}
+
+enum UserRole {
+  hr
+  candidate
+}
+
 model Resume {
   id            Int      @id @default(autoincrement())
   description   String   @db.Text
