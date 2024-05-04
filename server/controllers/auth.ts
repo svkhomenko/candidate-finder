@@ -1,13 +1,14 @@
 import { Request, Response } from 'express';
 // import { COOKIE_OPTIONS } from '../consts/default';
-// import prisma from '../lib/prisma';
-// import ClientError from '../types/error';
+import prisma from '../lib/prisma';
+import ClientError from '../types/error';
 // import { hashPassword, comparePasswords } from '../utils/password';
 // import { Token, ConfirmPayload, Email } from '../services';
+import Token from '../services/token';
 // import templates from '../consts/email';
 import UserService from '../services/user';
 
-// const user = prisma.user;
+const user = prisma.user;
 
 // const generateUserTokens = ({ id, email, login }: ConfirmPayload) => {
 //   const accessToken = Token.generate({ id, email, login });
@@ -23,25 +24,25 @@ const register = async (req: Request, res: Response) => {
   res.json({ id });
 };
 
-// const confirmEmail = async (req: Request, res: Response) => {
-//   const { token } = req.params;
-//   const data = Token.validate(token);
-//   if (!data || typeof data === 'string' || !data.id) {
-//     throw new ClientError('The confirm token is invalid or has expired.', 403);
-//   }
+const confirmEmail = async (req: Request, res: Response) => {
+  const { token } = req.params;
+  const data = Token.validate(token);
+  if (!data || typeof data === 'string' || !data.id) {
+    throw new ClientError('The confirm token is invalid or has expired.', 403);
+  }
 
-//   const found = await user.findUnique({ where: { id: data.id } });
-//   if (!found) {
-//     throw new ClientError('The confirm token is invalid or has expired.', 403);
-//   }
+  const found = await user.findUnique({ where: { id: data.id } });
+  if (!found) {
+    throw new ClientError('The confirm token is invalid or has expired.', 403);
+  }
 
-//   await user.update({
-//     where: { id: Number(data.id) },
-//     data: { isConfirmed: true },
-//   });
+  await user.update({
+    where: { id: Number(data.id) },
+    data: { isConfirmed: true },
+  });
 
-//   res.status(200).send();
-// };
+  res.status(200).send();
+};
 
 // const login = async (req: Request, res: Response) => {
 //   const { login, password } = req.body;
@@ -93,5 +94,5 @@ const register = async (req: Request, res: Response) => {
 //   res.sendStatus(204);
 // };
 
-export { register };
+export { register, confirmEmail };
 // export { register, confirmEmail, login, refresh, logout };
