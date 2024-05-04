@@ -29,7 +29,11 @@ const Token = {
   generateConfirmToken(payload: ConfirmPayload) {
     return Token.generate(payload, { expiresIn: '1h' });
   },
-};
 
-export { ConfirmPayload };
+  generateUserTokens({ id, email }: ConfirmPayload) {
+    const accessToken = Token.generate({ id, email });
+    const refreshToken = Token.generate({ id }, { expiresIn: '7d' });
+    return { accessToken, refreshToken };
+  },
+};
 export default Token;
