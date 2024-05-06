@@ -16,7 +16,7 @@ import {
   CheckboxGroup,
   Checkbox,
 } from '@chakra-ui/react';
-import CustomSelect from '~/components/Select/CustomAsyncSelect';
+import CustomSelect from '~/components/Select/CustomSelect';
 import styles from '../vacancy-form.styles';
 import layoutStyles from '~/components/Layout/layout.styles';
 import educationOptions from './education-options';
@@ -75,7 +75,7 @@ const VacancyCreateForm = () => {
                 </CheckboxGroup>
               </FormControl>
               <Button type="submit" w="200px" colorScheme="green">
-                Create
+                Створити
               </Button>
             </VStack>
           </form>
