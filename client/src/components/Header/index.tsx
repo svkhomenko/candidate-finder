@@ -10,11 +10,11 @@ import {
   MenuItem,
   MenuList,
   Icon,
-  Text,
 } from '@chakra-ui/react';
 import { useEffect, useRef } from 'react';
 import { FiMenu, FiX } from 'react-icons/fi';
 import { Link as ReactRouterLink, NavLink, useNavigate } from 'react-router-dom';
+import NavbarAuth from './NavbarAuth';
 import styles from './header.styles';
 
 // const links = [
@@ -91,7 +91,7 @@ const Header = () => {
             ))}
           </HStack>
         </HStack>
-        <Text fontWeight="semibold">Ім'я користувача</Text>
+        <NavbarAuth />
       </Flex>
     </Box>
   );
