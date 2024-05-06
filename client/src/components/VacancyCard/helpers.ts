@@ -4,7 +4,6 @@ function capitalizeFirstLetter(str: string) {
 
 function getFormattedSalary(salary: number) {
   return new Intl.NumberFormat('uk', {
-    style: 'currency',
     currency: 'UAH',
     maximumFractionDigits: 0,
   }).format(salary);
