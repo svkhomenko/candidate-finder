@@ -1,16 +1,18 @@
 import { logout, setUserAndToken } from '../profile-slice';
 import { apiSlice } from './api-slice';
+import type { IRegister, ILogin } from '~/validation/auth';
+import type { IUser, IAccessToken } from '~/types/user';
 
 export const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    register: builder.mutation({
-      query: (body) => ({
+    register: builder.mutation<void, IRegister>({
+      query: ({ passwordConfirm, ...body }) => ({
         url: 'auth/register',
         method: 'POST',
         body: body,
       }),
     }),
-    login: builder.mutation({
+    login: builder.mutation<IUser & { accessToken: IAccessToken }, ILogin>({
       query: (body) => ({
         url: 'auth/login',
         method: 'POST',
@@ -24,7 +26,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ['UserProfile'],
     }),
-    logout: builder.mutation({
+    logout: builder.mutation<void, void>({
       query: () => ({
         url: 'auth/logout',
         method: 'POST',
@@ -36,7 +38,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         } catch (error) {}
       },
     }),
-    confirmEmail: builder.mutation({
+    confirmEmail: builder.mutation<void, { confirmToken: string }>({
       query: ({ confirmToken }) => ({
         url: `auth/confirm-email/${confirmToken}`,
         method: 'POST',
