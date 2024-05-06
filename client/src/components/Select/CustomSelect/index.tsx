@@ -22,8 +22,10 @@ const CustomSelect = (props: any) => {
         ...theme,
         colors: {
           ...theme.colors,
-          primary25: green100,
           primary: green200,
+          primary25: green100,
+          primary50: green100,
+          primary75: green100,
         },
       })}
       menuPortalTarget={document.body}
