@@ -1,5 +1,5 @@
 import { Spinner } from '@chakra-ui/react';
-import Layout from '../Layout/Layout';
+import Layout from '../Layout';
 
 const Loader = ({ isFullScreen = true }) => {
   if (!isFullScreen) {
