@@ -10,15 +10,21 @@ import {
   MenuItem,
   MenuList,
   Icon,
+  Text,
 } from '@chakra-ui/react';
 import { useEffect, useRef } from 'react';
 import { FiMenu, FiX } from 'react-icons/fi';
 import { Link as ReactRouterLink, NavLink, useNavigate } from 'react-router-dom';
 import styles from './header.styles';
 
+// const links = [
+//   { href: '/', label: 'Резюме' },
+//   { href: '/vacancies', label: 'Вакансії' },
+// ];
+
 const links = [
-  { href: '/', label: 'Резюме' },
-  { href: '/vacancies', label: 'Вакансії' },
+  { href: '/', label: 'Знайти резюме' },
+  { href: '/vacancies/create', label: 'Розмістити вакансію' },
 ];
 
 const Header = () => {
@@ -77,7 +83,7 @@ const Header = () => {
           </ReactRouterLink>
         </Box>
         <HStack align="center" spacing={6}>
-          <HStack as="nav" spacing={6} display={{ base: 'none', md: 'flex' }} mr="50px">
+          <HStack as="nav" spacing={20} display={{ base: 'none', md: 'flex' }}>
             {links.map((l) => (
               <Link as={NavLink} to={l.href} key={l.label} fontWeight="bold" _hover={{ color: 'green.500' }}>
                 {l.label}
@@ -85,6 +91,7 @@ const Header = () => {
             ))}
           </HStack>
         </HStack>
+        <Text fontWeight="semibold">Ім'я користувача</Text>
       </Flex>
     </Box>
   );
