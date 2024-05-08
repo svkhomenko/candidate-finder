@@ -55,7 +55,7 @@ const NavbarAuth = () => {
                 Налаштування
               </MenuItem>
               <MenuItem px={4} py={2} color="red" onClick={() => logoutHandler()}>
-                Ввийти з акаунту
+                Вийти з акаунту
               </MenuItem>
             </MenuGroup>
           </MenuList>
