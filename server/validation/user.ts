@@ -1,8 +1,6 @@
 import Joi from 'joi';
 import { FULL_NAME_LENGTH, PASSWORD_LENGTH, ROLE_ENUM } from '../consts/validation';
 
-const JoiWithPhoneNumber = Joi.extend(require('joi-phone-number'));
-
 const loginSchema = Joi.object().keys({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
@@ -15,7 +13,18 @@ const registerSchema = Joi.object().keys({
   role: Joi.string()
     .valid(...ROLE_ENUM)
     .required(),
-  phoneNumber: JoiWithPhoneNumber.string().phoneNumber().required(),
+  phoneNumber: Joi.string()
+    .regex(/^\+?(?:[0-9] ?){6,14}[0-9]$/)
+    .messages({ 'string.pattern.base': `Invalid phone number` })
+    .required(),
 });
 
-export { loginSchema, registerSchema };
+const updateSchema = Joi.object().keys({
+  email: Joi.string().email(),
+  fullName: Joi.string().min(FULL_NAME_LENGTH.min).max(FULL_NAME_LENGTH.max),
+  phoneNumber: Joi.string()
+    .regex(/^\+?(?:[0-9] ?){6,14}[0-9]$/)
+    .messages({ 'string.pattern.base': `Invalid phone number` }),
+});
+
+export { loginSchema, registerSchema, updateSchema };

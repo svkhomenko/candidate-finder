@@ -4,6 +4,7 @@ import ClientError from '../types/error';
 import { hashPassword } from '../utils/password';
 import Email from './email';
 import Token from './token';
+import type { User } from '@prisma/client';
 
 const user = prisma.user;
 
@@ -36,6 +37,11 @@ const UserService = {
     return found;
   },
 
+  async sendConfirmTokenForEmail(id: number, email: string, fullName: string) {
+    const token = Token.generateConfirmToken({ id });
+    await Email.sendMail(email, templates.EMAIL_CONFIRM, { fullName, token });
+  },
+
   async create(data: IUser) {
     await UserService.checkFor('email', data.email);
 
@@ -45,10 +51,41 @@ const UserService = {
     });
     const { email, fullName } = data;
 
-    const token = Token.generateConfirmToken({ id });
-    await Email.sendMail(email, templates.EMAIL_CONFIRM, { fullName, token });
+    await UserService.sendConfirmTokenForEmail(id, email, fullName);
     return { id };
   },
+
+  async update(curUser: User, data: IUser) {
+    if (data.email) {
+      await UserService.checkFor('email', data.email, curUser.id);
+    }
+    let isConfirmed = true;
+    if (data.email && data.email !== curUser.email) {
+      isConfirmed = false;
+    }
+
+    const updatedUser = await user.update({
+      where: { id: curUser.id },
+      data: { ...data, isConfirmed },
+    });
+    if (!isConfirmed) {
+      await UserService.sendConfirmTokenForEmail(
+        updatedUser.id,
+        updatedUser.email,
+        updatedUser.fullName,
+      );
+    }
+
+    return { isConfirmed };
+  },
+
+  // async update(id: number, data: IUser) {
+  //   if (data.email) {
+  //     await UserService.checkFor('email', data.email, id);
+  //   }
+
+  //   await user.update({ where: { id }, data });
+  // },
 };
 
 export default UserService;
