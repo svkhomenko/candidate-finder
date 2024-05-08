@@ -21,7 +21,7 @@ const updateProfile = async (req: Request, res: Response) => {
     res.clearCookie('refreshToken');
   }
 
-  res.sendStatus(204);
+  res.status(201).json({ isConfirmed });
 };
 
 const deleteProfile = async (req: Request, res: Response) => {
