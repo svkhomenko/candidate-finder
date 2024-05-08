@@ -1,5 +1,4 @@
 import z from 'zod';
-import parsePhoneNumberFromString from 'libphonenumber-js';
 import { FULL_NAME_LENGTH, PASSWORD_LENGTH, ROLE_ENUM } from '../consts/validation';
 
 const loginSchema = z.object({
@@ -16,22 +15,7 @@ const registerSchema = z
     role: z.string().refine((role: string) => ROLE_ENUM.includes(role), {
       message: `role must be ${ROLE_ENUM.join(', ')}`,
     }),
-    phoneNumber: z.string().transform((arg, ctx) => {
-      const phone = parsePhoneNumberFromString(arg, {
-        defaultCountry: 'UA',
-        extract: false,
-      });
-
-      if (phone && phone.isValid()) {
-        return phone.number;
-      }
-
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Invalid phone number',
-      });
-      return z.NEVER;
-    }),
+    phoneNumber: z.string().regex(/^\+?(?:[0-9] ?){6,14}[0-9]$/, 'Invalid phone number'),
   })
   .refine((data) => data.password === data.passwordConfirm, {
     message: "Passwords don't match",
