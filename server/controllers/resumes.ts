@@ -76,6 +76,20 @@ const deleteResume = async (req: Request, res: Response) => {
   res.status(204).send();
 };
 
+const getResumeLanguageLevels = async (req: Request, res: Response) => {
+  const resumeId = Number(req.params.id);
+
+  await ResumeService.findOneOrThrow(resumeId);
+
+  const resumeLanguageLevels = await resumeLanguageLevel.findMany({
+    where: {
+      resumeId,
+    },
+  });
+
+  res.json(resumeLanguageLevels);
+};
+
 const createResumeLanguageLevel = async (req: Request, res: Response) => {
   const data = req.body;
   const resumeId = Number(req.params.id);
@@ -123,6 +137,7 @@ export {
   createResume,
   updateResume,
   deleteResume,
+  getResumeLanguageLevels,
   createResumeLanguageLevel,
   updateResumeLanguageLevel,
   deleteResumeLanguageLevel,

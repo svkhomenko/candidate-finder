@@ -5,6 +5,7 @@ import {
   createResume,
   updateResume,
   deleteResume,
+  getResumeLanguageLevels,
   createResumeLanguageLevel,
   updateResumeLanguageLevel,
   deleteResumeLanguageLevel,
@@ -25,6 +26,7 @@ const router = express.Router();
 
 router.get('/', validate(getResumesSchema, 'query'), boundary(getResumes));
 router.get('/:id', boundary(getResumeById));
+router.get('/:id/languages', boundary(getResumeLanguageLevels));
 
 router.use(auth);
 
