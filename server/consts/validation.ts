@@ -2,10 +2,26 @@ export const PASSWORD_LENGTH = { min: 8, max: 30 };
 export const FULL_NAME_LENGTH = { min: 4, max: 150 };
 export const ROLE_ENUM = ['hr', 'candidate'];
 
+export const RESUME_TITLE_LENGTH = { min: 4, max: 200 };
+export const VACANCY_TITLE_LENGTH = { min: 4, max: 200 };
 export const RESUME_DESCRIPTION_LENGTH = { min: 100, max: 3000 };
 export const VACANCY_DESCRIPTION_LENGTH = { min: 100, max: 3000 };
+export const INT_MAX = 999999999;
+export const EDUCATION_ENUM = [
+  'basic_general',
+  'complete_general',
+  'junior_bachelor',
+  'bachelor',
+  'master',
+  'doctor_philosophy_arts',
+  'doctor_sciences',
+];
+export const LATITUDE = { min: -90, max: 90 };
+export const LONGITUDE = { min: -180, max: 180 };
+export const CONTRACT_ENUM = ['full_time', 'part_time', 'any'];
+export const LEVEL_ENUM = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
-export const LANGUAGES_ENUM = [
+export const LANGUAGE_ENUM = [
   'aa',
   'ab',
   'ae',

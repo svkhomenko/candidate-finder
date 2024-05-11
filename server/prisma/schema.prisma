@@ -37,6 +37,7 @@ model Resume {
   education   Education
   latitude    Decimal  @db.Decimal(7, 5)
   longitude   Decimal  @db.Decimal(8, 5)
+  online      Boolean
   contract    Contract
   userId      Int      @map("user_id")
 
@@ -68,6 +69,7 @@ model Vacancy {
   education   Education
   latitude    Decimal  @db.Decimal(7, 5)
   longitude   Decimal  @db.Decimal(8, 5)
+  online      Boolean
   contract    Contract
   userId      Int      @map("user_id")
 

@@ -122,6 +122,15 @@ function getNewCents(
 }
 
 function kmeans(data: UniMultiDimensionalArray, k: number, init_cent?: Array<any>) {
+  if (data.length < 2) {
+    return {
+      iterations: 0,
+      k: k,
+      clusterIndexes: [],
+      centroids: [],
+    };
+  }
+
   let cents: Centroids = [];
   let clusterIndexes: Array<number> = [];
   let centMoved: boolean = false;

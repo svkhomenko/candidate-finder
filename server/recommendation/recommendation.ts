@@ -144,6 +144,13 @@ class Recommendations {
     this.updateClassFields(docs);
   }
 
+  handleUpdateWithoutChangingDesc() {
+    this.documents = this.documents.map((doc) => {
+      doc.recommendatedResumes = undefined;
+      return doc;
+    });
+  }
+
   handleDelete(document: Resume | Vacancy, documentType: IDocumentType) {
     let docs = this.documents.filter(
       (doc) => !(doc.id === document.id && doc.type === documentType),

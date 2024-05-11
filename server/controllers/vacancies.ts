@@ -67,7 +67,7 @@ const updateVacancy = async (req: Request, res: Response) => {
     data,
   });
 
-  recommendations.handleCreate(updatedVacancy, VACANCY);
+  recommendations.handleUpdate(updatedVacancy, VACANCY);
 
   res.status(201).json(updatedVacancy);
 };
@@ -81,7 +81,7 @@ const deleteVacancy = async (req: Request, res: Response) => {
     where: { id: vacancyId },
   });
 
-  recommendations.handleCreate(deletedVacancy, VACANCY);
+  recommendations.handleDelete(deletedVacancy, VACANCY);
 
   res.status(204).send();
 };
