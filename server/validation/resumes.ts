@@ -61,9 +61,25 @@ const updateResumeLanguageLevelsSchema = Joi.object().keys({
     .required(),
 });
 
+const getResumesSchema = Joi.object()
+  .keys({
+    _start: Joi.number().min(0),
+    _end: Joi.number().greater(Joi.ref('_start')),
+    userId: Joi.number(),
+    q: Joi.string(),
+    salaryMin: Joi.number().positive().max(INT_MAX),
+    salaryMax: Joi.number().positive().max(INT_MAX),
+    experience: Joi.number().min(0).max(INT_MAX),
+    education: Joi.string().valid(...EDUCATION_ENUM),
+    online: Joi.boolean(),
+    contract: Joi.string().valid(...CONTRACT_ENUM),
+  })
+  .and('_start', '_end');
+
 export {
   createSchema,
   updateSchema,
   createResumeLanguageLevelsSchema,
   updateResumeLanguageLevelsSchema,
+  getResumesSchema,
 };

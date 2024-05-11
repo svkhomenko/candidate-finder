@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  getResumes,
   getResumeById,
   createResume,
   updateResume,
@@ -15,13 +16,14 @@ import {
   updateSchema,
   createResumeLanguageLevelsSchema,
   updateResumeLanguageLevelsSchema,
+  getResumesSchema,
 } from '../validation/resumes';
 import auth from '../middleware/auth';
 import { checkCandidateRights, checkUserResumeRights } from '../middleware/check-rights';
 
 const router = express.Router();
 
-// router.get('/', boundary(getResumes));
+router.get('/', validate(getResumesSchema, 'query'), boundary(getResumes));
 router.get('/:id', boundary(getResumeById));
 
 router.use(auth);

@@ -4,9 +4,24 @@ import ResumeService from '../services/resume';
 import recommendations from '../recommendation/recommendation';
 import { RESUME } from '../consts/const';
 import { User, Language } from '@prisma/client';
+import { getPageOptions } from '../utils/query-options';
 
 const resume = prisma.resume;
 const resumeLanguageLevel = prisma.resumeLanguageLevel;
+
+const getResumes = async (req: Request, res: Response) => {
+  const where = ResumeService.getWhereOptions(req.query);
+
+  const [count, resumes] = await prisma.$transaction([
+    resume.count({ where }),
+    resume.findMany({
+      where,
+      ...getPageOptions(req.query),
+    }),
+  ]);
+
+  res.header('X-Total-Count', `${count}`).json(resumes);
+};
 
 const getResumeById = async (req: Request, res: Response) => {
   const resumeId = Number(req.params.id);
@@ -103,6 +118,7 @@ const deleteResumeLanguageLevel = async (req: Request, res: Response) => {
 };
 
 export {
+  getResumes,
   getResumeById,
   createResume,
   updateResume,

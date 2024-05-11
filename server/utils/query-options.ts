@@ -1,11 +1,9 @@
-import { Prisma } from '@prisma/client';
+import { Education, Contract } from '@prisma/client';
+import { EDUCATION_ENUM } from '../consts/validation';
 
-type QueryParams = {
+type IPageParams = {
   _start?: string;
   _end?: string;
-  _sort?: string;
-  _order?: 'ASC' | 'DESC';
-  q?: string;
 };
 
 const DEFAULT_PAGE_OPTIONS = {
@@ -13,13 +11,7 @@ const DEFAULT_PAGE_OPTIONS = {
   take: 10,
 };
 
-const DEFAULT_SORT_OPTIONS = (sort: string) => ({
-  orderBy: {
-    [sort]: Prisma.SortOrder.asc,
-  },
-});
-
-const getPageOptions = (params: QueryParams) => {
+const getPageOptions = (params: IPageParams) => {
   if (!params) {
     return DEFAULT_PAGE_OPTIONS;
   }
@@ -33,20 +25,27 @@ const getPageOptions = (params: QueryParams) => {
   return { skip, take };
 };
 
-const getSortOptions = (params: QueryParams, defaultSort: string) => {
-  if (!params) {
-    return DEFAULT_SORT_OPTIONS(defaultSort);
-  }
-  const { _sort, _order } = params;
-  if (!_sort || !_order) {
-    return DEFAULT_SORT_OPTIONS(defaultSort);
+const getEducationOptions = (education: Education, greater: boolean): Education[] => {
+  let index = EDUCATION_ENUM.findIndex((edu) => edu === education);
+  if (index === -1) {
+    return [];
   }
 
-  return {
-    orderBy: {
-      [_sort]: _order.toLowerCase(),
-    },
-  };
+  let result = [];
+  if (greater) {
+    for (let i = index; i < EDUCATION_ENUM.length; i++) {
+      result.push(EDUCATION_ENUM[i]);
+    }
+  } else {
+    for (let i = 0; i <= index; i++) {
+      result.push(EDUCATION_ENUM[i]);
+    }
+  }
+  return result;
 };
 
-export { getPageOptions, getSortOptions, QueryParams, DEFAULT_SORT_OPTIONS };
+const getContractOptions = (contract: Contract): Contract[] => {
+  return [contract, 'any'];
+};
+
+export { getPageOptions, getEducationOptions, getContractOptions };
