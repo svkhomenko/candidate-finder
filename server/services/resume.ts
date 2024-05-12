@@ -11,10 +11,10 @@ type IQueryParams = {
   salaryMin?: string;
   salaryMax?: string;
   experience?: string;
-  education?: Education;
+  education?: Education[];
   place_id?: string;
   online?: string;
-  contract?: Contract;
+  contract?: Contract[];
 };
 
 const ResumeService = {
@@ -70,8 +70,8 @@ const ResumeService = {
     if (experience) {
       where.experience = { gte: Number(experience) };
     }
-    if (education) {
-      where.education = { in: getEducationOptions(education, true) };
+    if (education && education.length !== 0) {
+      where.education = { in: education };
     }
     if (place_id) {
       where.place_id = place_id;
@@ -79,8 +79,8 @@ const ResumeService = {
     if (online) {
       where.online = online === 'true';
     }
-    if (contract) {
-      where.contract = { in: getContractOptions(contract) };
+    if (contract && contract.length !== 0) {
+      where.contract = { in: [...contract, 'any'] };
     }
 
     return where;

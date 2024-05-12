@@ -68,10 +68,10 @@ const getResumesSchema = Joi.object()
     salaryMin: Joi.number().positive().max(INT_MAX),
     salaryMax: Joi.number().positive().max(INT_MAX),
     experience: Joi.number().min(0).max(INT_MAX),
-    education: Joi.string().valid(...EDUCATION_ENUM),
+    education: Joi.array().items(Joi.string().valid(...EDUCATION_ENUM)),
     place_id: Joi.string(),
     online: Joi.boolean(),
-    contract: Joi.string().valid(...CONTRACT_ENUM),
+    contract: Joi.array().items(Joi.string().valid(...CONTRACT_ENUM)),
   })
   .and('_start', '_end');
 
