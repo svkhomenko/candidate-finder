@@ -16,8 +16,6 @@ export const EDUCATION_ENUM = [
   'doctor_philosophy_arts',
   'doctor_sciences',
 ];
-export const LATITUDE = { min: -90, max: 90 };
-export const LONGITUDE = { min: -180, max: 180 };
 export const CONTRACT_ENUM = ['full_time', 'part_time', 'any'];
 export const LEVEL_ENUM = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 

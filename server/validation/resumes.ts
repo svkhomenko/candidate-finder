@@ -4,8 +4,6 @@ import {
   RESUME_DESCRIPTION_LENGTH,
   INT_MAX,
   EDUCATION_ENUM,
-  LATITUDE,
-  LONGITUDE,
   CONTRACT_ENUM,
   LANGUAGE_ENUM,
   LEVEL_ENUM,
@@ -23,8 +21,8 @@ const createSchema = Joi.object().keys({
   education: Joi.string()
     .valid(...EDUCATION_ENUM)
     .required(),
-  latitude: Joi.number().required().min(LATITUDE.min).max(LATITUDE.max),
-  longitude: Joi.number().required().min(LONGITUDE.min).max(LONGITUDE.max),
+  place_id: Joi.string().required(),
+  address: Joi.string().required(),
   online: Joi.boolean().required(),
   contract: Joi.string()
     .valid(...CONTRACT_ENUM)
@@ -39,8 +37,8 @@ const updateSchema = Joi.object()
     salaryMax: Joi.number().positive().min(Joi.ref('salaryMin')).max(INT_MAX),
     experience: Joi.number().min(0).max(INT_MAX),
     education: Joi.string().valid(...EDUCATION_ENUM),
-    latitude: Joi.number().min(LATITUDE.min).max(LATITUDE.max),
-    longitude: Joi.number().min(LONGITUDE.min).max(LONGITUDE.max),
+    place_id: Joi.string().required(),
+    address: Joi.string().required(),
     online: Joi.boolean(),
     contract: Joi.string().valid(...CONTRACT_ENUM),
   })
@@ -71,6 +69,7 @@ const getResumesSchema = Joi.object()
     salaryMax: Joi.number().positive().max(INT_MAX),
     experience: Joi.number().min(0).max(INT_MAX),
     education: Joi.string().valid(...EDUCATION_ENUM),
+    place_id: Joi.string(),
     online: Joi.boolean(),
     contract: Joi.string().valid(...CONTRACT_ENUM),
   })

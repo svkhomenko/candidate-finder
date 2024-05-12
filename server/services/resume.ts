@@ -12,6 +12,7 @@ type IQueryParams = {
   salaryMax?: string;
   experience?: string;
   education?: Education;
+  place_id?: string;
   online?: string;
   contract?: Contract;
 };
@@ -50,7 +51,7 @@ const ResumeService = {
 
   getWhereOptions(queryParams: IQueryParams) {
     const where: Prisma.ResumeWhereInput = {};
-    const { userId, q, salaryMin, salaryMax, experience, education, online, contract } =
+    const { userId, q, salaryMin, salaryMax, experience, education, place_id, online, contract } =
       queryParams;
 
     if (userId) {
@@ -71,6 +72,9 @@ const ResumeService = {
     }
     if (education) {
       where.education = { in: getEducationOptions(education, true) };
+    }
+    if (place_id) {
+      where.place_id = place_id;
     }
     if (online) {
       where.online = online === 'true';

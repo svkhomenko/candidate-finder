@@ -35,8 +35,8 @@ model Resume {
   salaryMax   Int      @map("salary_max")
   experience  Int
   education   Education
-  latitude    Decimal  @db.Decimal(7, 5)
-  longitude   Decimal  @db.Decimal(8, 5)
+  place_id    String   @db.Text
+  address     String   @db.Text
   online      Boolean
   contract    Contract
   userId      Int      @map("user_id")
@@ -67,8 +67,8 @@ model Vacancy {
   salaryMax   Int      @map("salary_max")
   experience  Int
   education   Education
-  latitude    Decimal  @db.Decimal(7, 5)
-  longitude   Decimal  @db.Decimal(8, 5)
+  place_id    String   @db.Text
+  address     String   @db.Text
   online      Boolean
   contract    Contract
   userId      Int      @map("user_id")
