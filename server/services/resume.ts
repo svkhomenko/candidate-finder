@@ -1,7 +1,6 @@
 import prisma from '../lib/prisma';
 import ClientError from '../types/error';
 import { Education, Contract, Prisma } from '@prisma/client';
-import { getEducationOptions, getContractOptions } from '../utils/query-options';
 
 const resume = prisma.resume;
 
@@ -58,8 +57,13 @@ const ResumeService = {
       where.userId = Number(userId);
     }
     if (q) {
-      where.title = { contains: q };
-      where.description = { contains: q };
+      where.OR = [];
+      where.OR.push(
+        {
+          title: { contains: q },
+        },
+        { description: { contains: q } },
+      );
     }
     if (salaryMin) {
       where.salaryMax = { gte: Number(salaryMin) };
