@@ -3,6 +3,7 @@ import PageLayout from './components/PageLayout';
 import Home from './pages/Home/Home';
 import NotFound from './pages/NotFound/NotFound';
 import ProfileRoutes from './routes/Profile';
+import ResumesRoutes from './routes/Resumes';
 import VacanciesRoutes from './routes/Vacancies';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
@@ -23,6 +24,7 @@ function App() {
           <Route path="profile/*" element={<ProfileRoutes />} />
         </Route>
 
+        <Route path="resumes/*" element={<ResumesRoutes />} />
         <Route path="vacancies/*" element={<VacanciesRoutes />} />
         <Route path="/*" element={<NotFound />} />
       </Route>

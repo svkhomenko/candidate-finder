@@ -27,7 +27,8 @@ export type ResumesParam = {
   q?: string;
   salaryMin?: number;
   salaryMax?: number;
-  experience?: number;
+  experienceMin?: number;
+  experienceMax?: number;
   education?: Education[];
   place_id?: string;
   online?: boolean;

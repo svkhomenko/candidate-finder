@@ -1,13 +1,14 @@
 import { apiSlice } from './api-slice';
 import type { ICreate, IUpdate, ICreateResumeLanguageLevel, IUpdateResumeLanguageLevel } from '~/validation/resumes';
 import type { Resume, ResumesParam, ResumesResponse, ResumeLanguageLevel } from '~/types/resume';
+import { prepareSearchParams } from './prepare-search-params';
 
 export const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getResumes: builder.query<ResumesResponse, ResumesParam>({
       query: (queryParams) => ({
         url: `/resumes`,
-        params: { ...queryParams },
+        params: prepareSearchParams(queryParams),
       }),
       transformResponse(resumes: Resume[], meta: any) {
         return { resumes, totalCount: Number(meta.response.headers.get('X-Total-Count')) };

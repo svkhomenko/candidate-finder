@@ -4,11 +4,10 @@ import { Flex, Circle } from '@chakra-ui/react';
 type Props = {
   numberOfPages: number;
   curPage: number;
-  // setCurPage: React.Dispatch<React.SetStateAction<number>>;
+  setCurPage: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const Pagination = ({ numberOfPages, curPage }: Props) => {
-  // const Pagination = ({ numberOfPages, curPage, setCurPage }: Props) => {
+const Pagination = ({ numberOfPages, curPage, setCurPage }: Props) => {
   const [pagesArr, setPagesArr] = useState(getPagesArr());
 
   useEffect(() => {
@@ -32,9 +31,9 @@ const Pagination = ({ numberOfPages, curPage }: Props) => {
               }}
               bg={index == curPage ? 'secondary' : 'text'}
               color={index == curPage ? 'text' : 'default'}
-              // onClick={() => {
-              //   setCurPage(index);
-              // }}
+              onClick={() => {
+                setCurPage(index);
+              }}
             >
               {index}
             </Circle>
