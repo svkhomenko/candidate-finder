@@ -18,6 +18,7 @@ import { FiEdit } from 'react-icons/fi';
 import { useAppSelector } from '~/hooks/use-app-selector';
 import Logout from './Logout';
 import DeleteProfile from './DeleteProfile';
+import { HR } from '~/consts/consts';
 import styles from '../profile-card.styles';
 
 type IProps = { setIsEdit: React.Dispatch<React.SetStateAction<boolean>> };
@@ -53,7 +54,7 @@ const ProfileInfo = ({ setIsEdit }: IProps) => {
             </Text>
           </HStack>
           <Box>
-            {user.role === 'hr' ? (
+            {user.role === HR ? (
               <Link isExternal href="/profile/vacancies">
                 <Button variant="outline">Власні вакансії</Button>
               </Link>

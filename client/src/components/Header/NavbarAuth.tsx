@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '~/hooks/use-app-selector';
 import useRequestHandler from '~/hooks/use-request-handler';
 import { useLogoutMutation } from '~/store/api/auth-slice';
+import { HR } from '~/consts/consts';
 
 const NavbarAuth = () => {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const NavbarAuth = () => {
             </MenuButton>
           </HStack>
           <MenuList>
-            {user.role === 'hr' ? (
+            {user.role === HR ? (
               <MenuGroup title="Вакансії">
                 <MenuItem px={4} py={2} onClick={() => navigate('/profile/vacancies')}>
                   Мої вакансії
