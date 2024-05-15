@@ -14,23 +14,29 @@ import {
 import { useEffect, useRef } from 'react';
 import { FiMenu, FiX } from 'react-icons/fi';
 import { Link as ReactRouterLink, NavLink, useNavigate } from 'react-router-dom';
+import { useAppSelector } from '~/hooks/use-app-selector';
 import NavbarAuth from './NavbarAuth';
+import { HR } from '~/consts/consts';
 import styles from './header.styles';
 
-// const links = [
-//   { href: '/', label: 'Резюме' },
-//   { href: '/vacancies', label: 'Вакансії' },
-// ];
-
-const links = [
-  { href: '/', label: 'Знайти резюме' },
-  { href: '/vacancies/create', label: 'Розмістити вакансію' },
-];
-
 const Header = () => {
+  const { user } = useAppSelector((state) => state.profile);
   const navigate = useNavigate();
 
   const header = useRef<HTMLDivElement>(null);
+
+  const links = [
+    { href: '/resumes', label: 'Знайти резюме' },
+    { href: '/vacancies', label: 'Знайти вакансію' },
+  ];
+
+  if (user.id) {
+    if (user.role === HR) {
+      links.push({ href: '/vacancies/create', label: 'Розмістити вакансію' });
+    } else {
+      links.push({ href: '/resumes/create', label: 'Розмістити резюме' });
+    }
+  }
 
   useEffect(() => {
     const checkScroll = () => {
