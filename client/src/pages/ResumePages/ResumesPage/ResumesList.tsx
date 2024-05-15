@@ -6,12 +6,10 @@ import Pagination from '~/components/Pagination';
 import Loader from '~/components/Loader';
 import { useGetResumesQuery } from '~/store/api/resume-slice';
 import type { ResumesParam } from '~/types/resume';
-import type { Contract } from '~/types/resume-vacancy-enums';
+import type { Contract, Education } from '~/types/resume-vacancy-enums';
 
 // type ResumesParam = {
-//   education?: Education[] | undefined;
 //   place_id?: string | undefined;
-//   online?: boolean | undefined;
 // }
 
 type IProps = {
@@ -21,9 +19,20 @@ type IProps = {
   salaryMax: number | null;
   experienceMin: number | null;
   experienceMax: number | null;
+  online: boolean;
+  education: Education[];
 };
 
-const ResumesList = ({ q, contract, salaryMin, salaryMax, experienceMin, experienceMax }: IProps) => {
+const ResumesList = ({
+  q,
+  contract,
+  salaryMin,
+  salaryMax,
+  experienceMin,
+  experienceMax,
+  online,
+  education,
+}: IProps) => {
   const [curPage, setCurPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -37,10 +46,12 @@ const ResumesList = ({ q, contract, salaryMin, salaryMax, experienceMin, experie
   salaryMax ? (params.salaryMax = salaryMax) : (params.salaryMax = undefined);
   experienceMin || experienceMin === 0 ? (params.experienceMin = experienceMin) : (params.experienceMin = undefined);
   experienceMax || experienceMax === 0 ? (params.experienceMax = experienceMax) : (params.experienceMax = undefined);
+  online ? (params.online = online) : (params.online = undefined);
+  education && education.length !== 0 ? (params.education = education) : (params.education = undefined);
 
   useEffect(() => {
     setCurPage(1);
-  }, [q, contract, salaryMin, salaryMax, experienceMin, experienceMax]);
+  }, [q, contract, salaryMin, salaryMax, experienceMin, experienceMax, online, education]);
 
   const { data, isFetching } = useGetResumesQuery(params);
 

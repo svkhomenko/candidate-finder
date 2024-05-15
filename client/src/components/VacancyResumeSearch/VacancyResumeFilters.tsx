@@ -12,16 +12,18 @@ import {
 import DrawerWrapper from '~/components/Drawer/DrawerWrapper';
 import { IoFilter } from 'react-icons/io5';
 import { useForm } from 'react-hook-form';
-import { contractOptions } from './filter-options';
-import type { Contract } from '~/types/resume-vacancy-enums';
+import { contractOptions, educationOptions } from '~/consts/resume-vacancy-options';
+import type { Contract, Education } from '~/types/resume-vacancy-enums';
 import { INT_MAX } from '~/consts/validation';
 
 export type IFilter = {
-  contact: Contract[];
+  contract: Contract[];
   salaryMin: number;
   salaryMax: number;
   experienceMin: number;
   experienceMax: number;
+  online: boolean;
+  education: Education[];
 };
 
 type IProps = {
@@ -30,6 +32,8 @@ type IProps = {
   setSalaryMax: React.Dispatch<React.SetStateAction<number | null>>;
   setExperienceMin: React.Dispatch<React.SetStateAction<number | null>>;
   setExperienceMax: React.Dispatch<React.SetStateAction<number | null>>;
+  setOnline: React.Dispatch<React.SetStateAction<boolean>>;
+  setEducation: React.Dispatch<React.SetStateAction<Education[]>>;
 };
 
 const VacancyResumeFilters = ({
@@ -38,6 +42,8 @@ const VacancyResumeFilters = ({
   setSalaryMax,
   setExperienceMin,
   setExperienceMax,
+  setOnline,
+  setEducation,
 }: IProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { register, getValues } = useForm<IFilter>();
@@ -61,13 +67,13 @@ const VacancyResumeFilters = ({
                 <Checkbox
                   key={cOpt.value}
                   value={cOpt.value}
-                  {...register('contact', {
+                  {...register('contract', {
                     onChange: () => {
-                      setContract(getValues('contact'));
+                      setContract(getValues('contract'));
                     },
                   })}
                 >
-                  {cOpt.lable}
+                  {cOpt.label}
                 </Checkbox>
               ))}
             </VStack>
@@ -176,6 +182,40 @@ const VacancyResumeFilters = ({
               </FormLabel>
             </HStack>
           </VStack>
+
+          <Checkbox
+            value="online"
+            {...register('online', {
+              onChange: () => {
+                setOnline(Boolean(getValues('online')));
+              },
+            })}
+          >
+            <FormLabel margin="0" fontWeight="700">
+              Віддалена робота
+            </FormLabel>
+          </Checkbox>
+
+          <CheckboxGroup colorScheme="green">
+            <VStack spacing={2} alignItems="start">
+              <FormLabel htmlFor="education" margin="0" fontWeight="700">
+                Рівень освіти
+              </FormLabel>
+              {educationOptions.map((eOpt) => (
+                <Checkbox
+                  key={eOpt.value}
+                  value={eOpt.value}
+                  {...register('education', {
+                    onChange: () => {
+                      setEducation(getValues('education'));
+                    },
+                  })}
+                >
+                  {eOpt.label}
+                </Checkbox>
+              ))}
+            </VStack>
+          </CheckboxGroup>
         </VStack>
       </DrawerWrapper>
     </>
