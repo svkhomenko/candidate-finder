@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import VacancyResumeSearch from '~/components/VacancyResumeSearch/VacancyResumeSearch';
 import VacancyResumeFilters from '~/components/VacancyResumeSearch/VacancyResumeFilters';
-import ResumesList from './ResumesList';
+import ResumesList from '~/pages/ResumePages/ResumesPage/ResumesList';
 import type { Contract, Education } from '~/types/resume-vacancy-enums';
 
-const ResumesPage = () => {
+type IProps = {
+  isProfileResumes?: boolean;
+};
+
+const ResumesPage = ({ isProfileResumes = false }: IProps) => {
   const [q, setQ] = useState<string>('');
   const [place_id, setPlaceId] = useState<string>('');
   const [contract, setContract] = useState<Contract[]>([]);
@@ -37,6 +41,7 @@ const ResumesPage = () => {
         experienceMax={experienceMax}
         online={online}
         education={education}
+        isProfileResumes={isProfileResumes}
       />
     </>
   );

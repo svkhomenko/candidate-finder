@@ -7,6 +7,7 @@ import Loader from '~/components/Loader';
 import { useGetResumesQuery } from '~/store/api/resume-slice';
 import type { ResumesParam } from '~/types/resume';
 import type { Contract, Education } from '~/types/resume-vacancy-enums';
+import { useAppSelector } from '~/hooks/use-app-selector';
 
 type IProps = {
   q: string;
@@ -18,6 +19,7 @@ type IProps = {
   experienceMax: number | null;
   online: boolean;
   education: Education[];
+  isProfileResumes?: boolean;
 };
 
 const ResumesList = ({
@@ -30,7 +32,10 @@ const ResumesList = ({
   experienceMax,
   online,
   education,
+  isProfileResumes,
 }: IProps) => {
+  const { user } = useAppSelector((state) => state.profile);
+
   const [curPage, setCurPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -47,6 +52,10 @@ const ResumesList = ({
   experienceMax || experienceMax === 0 ? (params.experienceMax = experienceMax) : (params.experienceMax = undefined);
   online ? (params.online = online) : (params.online = undefined);
   education && education.length !== 0 ? (params.education = education) : (params.education = undefined);
+
+  if (isProfileResumes && user.id) {
+    params.userId = Number(user.id);
+  }
 
   useEffect(() => {
     setCurPage(1);
