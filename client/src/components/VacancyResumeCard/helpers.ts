@@ -35,6 +35,13 @@ function getExpirienceStr(experience: number) {
   return `Досвід роботи від ${experience} ${getYearWord(experience)}`;
 }
 
+function getOnlineStr(online: boolean) {
+  if (online) {
+    return 'Віддалена робота';
+  }
+  return '';
+}
+
 const educationTranslation = {
   basic_general: 'Базова середня освіта',
   complete_general: 'Повна загальна середня освіта',
@@ -56,6 +63,7 @@ export {
   getFormattedSalary,
   getYearWord,
   getExpirienceStr,
+  getOnlineStr,
   educationTranslation,
   contractTranslation,
 };

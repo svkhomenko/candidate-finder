@@ -13,7 +13,13 @@ import {
   // WrapItem,
 } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { getFormattedSalary, getExpirienceStr, educationTranslation, contractTranslation } from './helpers';
+import {
+  getFormattedSalary,
+  getExpirienceStr,
+  getOnlineStr,
+  educationTranslation,
+  contractTranslation,
+} from './helpers';
 import type { Resume } from '~/types/resume';
 import styles from './vacancy-resume-card.styles';
 
@@ -65,8 +71,11 @@ const ResumeCard = ({ resume }: Props) => {
               <GridItem colSpan={1}>
                 <Text color="green.800">{educationTranslation[resume.education]}</Text>
               </GridItem>
-              <GridItem colSpan={2}>
+              <GridItem colSpan={1}>
                 <Text color="green.800">{contractTranslation[resume.contract]}</Text>
+              </GridItem>
+              <GridItem colSpan={1}>
+                <Text color="green.800">{getOnlineStr(resume.online)}</Text>
               </GridItem>
             </Grid>
 
