@@ -8,12 +8,9 @@ import { useGetResumesQuery } from '~/store/api/resume-slice';
 import type { ResumesParam } from '~/types/resume';
 import type { Contract, Education } from '~/types/resume-vacancy-enums';
 
-// type ResumesParam = {
-//   place_id?: string | undefined;
-// }
-
 type IProps = {
   q: string;
+  place_id: string;
   contract: Contract[];
   salaryMin: number | null;
   salaryMax: number | null;
@@ -25,6 +22,7 @@ type IProps = {
 
 const ResumesList = ({
   q,
+  place_id,
   contract,
   salaryMin,
   salaryMax,
@@ -41,6 +39,7 @@ const ResumesList = ({
     _end: curPage * itemsPerPage,
   };
   q ? (params.q = q) : (params.q = undefined);
+  place_id ? (params.place_id = place_id) : (params.place_id = undefined);
   contract && contract.length !== 0 ? (params.contract = contract) : (params.contract = undefined);
   salaryMin ? (params.salaryMin = salaryMin) : (params.salaryMin = undefined);
   salaryMax ? (params.salaryMax = salaryMax) : (params.salaryMax = undefined);

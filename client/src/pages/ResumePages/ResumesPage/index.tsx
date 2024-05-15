@@ -6,6 +6,7 @@ import type { Contract, Education } from '~/types/resume-vacancy-enums';
 
 const ResumesPage = () => {
   const [q, setQ] = useState<string>('');
+  const [place_id, setPlaceId] = useState<string>('');
   const [contract, setContract] = useState<Contract[]>([]);
   const [salaryMin, setSalaryMin] = useState<number | null>(null);
   const [salaryMax, setSalaryMax] = useState<number | null>(null);
@@ -16,7 +17,7 @@ const ResumesPage = () => {
 
   return (
     <>
-      <VacancyResumeSearch setQ={setQ} />
+      <VacancyResumeSearch setQ={setQ} setPlaceId={setPlaceId} />
       <VacancyResumeFilters
         setContract={setContract}
         setSalaryMin={setSalaryMin}
@@ -28,6 +29,7 @@ const ResumesPage = () => {
       />
       <ResumesList
         q={q}
+        place_id={place_id}
         contract={contract}
         salaryMin={salaryMin}
         salaryMax={salaryMax}

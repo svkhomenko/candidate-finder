@@ -1,6 +1,6 @@
 import { Stack, Input, Button } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-// import PlacesSearch from '~/components/PlacesSearch/CitySearch';
+import PlacesSearch from '~/components/PlacesSearch/CitySearch';
 
 export type ISearch = {
   q: string;
@@ -8,9 +8,10 @@ export type ISearch = {
 
 type IProps = {
   setQ: React.Dispatch<React.SetStateAction<string>>;
+  setPlaceId: React.Dispatch<React.SetStateAction<string>>;
 };
 
-function VacancyResumeSearch({ setQ }: IProps) {
+function VacancyResumeSearch({ setQ, setPlaceId }: IProps) {
   const { register, getValues } = useForm<ISearch>();
 
   return (
@@ -34,7 +35,7 @@ function VacancyResumeSearch({ setQ }: IProps) {
             },
           })}
         />
-        {/* <PlacesSearch /> */}
+        <PlacesSearch setPlaceId={setPlaceId} />
       </Stack>
       <Button type="submit" colorScheme="green" w="250px">
         Пошук
