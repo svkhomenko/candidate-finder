@@ -13,17 +13,17 @@ export const createSchema = z
   .object({
     title: z.string().min(RESUME_TITLE_LENGTH.min).max(RESUME_TITLE_LENGTH.max),
     description: z.string().min(RESUME_DESCRIPTION_LENGTH.min).max(RESUME_DESCRIPTION_LENGTH.max),
-    salaryMin: z.number().positive().max(INT_MAX),
-    salaryMax: z.number().positive().max(INT_MAX),
-    experience: z.number().min(0).max(INT_MAX),
+    salaryMin: z.number({ invalid_type_error: 'Input salary' }).positive().max(INT_MAX),
+    salaryMax: z.number({ invalid_type_error: 'Input salary' }).positive().max(INT_MAX),
+    experience: z.number({ invalid_type_error: 'Input experience' }).min(0).max(INT_MAX),
     education: z.string().refine((education: string) => EDUCATION_ENUM.includes(education), {
-      message: `education must be ${EDUCATION_ENUM.join(', ')}`,
+      message: `Required`,
     }),
-    place_id: z.string(),
+    place_id: z.string().min(1),
     address: z.string(),
     online: z.boolean(),
     contract: z.string().refine((contract: string) => CONTRACT_ENUM.includes(contract), {
-      message: `contract must be ${CONTRACT_ENUM.join(', ')}`,
+      message: `Required`,
     }),
   })
   .refine((data) => data.salaryMin <= data.salaryMax, {
@@ -35,17 +35,17 @@ export const updateSchema = z
   .object({
     title: z.string().min(RESUME_TITLE_LENGTH.min).max(RESUME_TITLE_LENGTH.max),
     description: z.string().min(RESUME_DESCRIPTION_LENGTH.min).max(RESUME_DESCRIPTION_LENGTH.max),
-    salaryMin: z.number().positive().max(INT_MAX),
-    salaryMax: z.number().positive().max(INT_MAX),
-    experience: z.number().min(0).max(INT_MAX),
+    salaryMin: z.number({ invalid_type_error: 'Input salary' }).positive().max(INT_MAX),
+    salaryMax: z.number({ invalid_type_error: 'Input salary' }).positive().max(INT_MAX),
+    experience: z.number({ invalid_type_error: 'Input experience' }).min(0).max(INT_MAX),
     education: z.string().refine((education: string) => EDUCATION_ENUM.includes(education), {
-      message: `education must be ${EDUCATION_ENUM.join(', ')}`,
+      message: `Required`,
     }),
-    place_id: z.string(),
+    place_id: z.string().min(1),
     address: z.string(),
     online: z.boolean(),
     contract: z.string().refine((contract: string) => CONTRACT_ENUM.includes(contract), {
-      message: `contract must be ${CONTRACT_ENUM.join(', ')}`,
+      message: `Required`,
     }),
   })
   .refine((data) => data.salaryMin <= data.salaryMax, {
@@ -55,16 +55,16 @@ export const updateSchema = z
 
 export const createResumeLanguageLevelSchema = z.object({
   language: z.string().refine((language: string) => LANGUAGE_ENUM.includes(language), {
-    message: `language must be ${LANGUAGE_ENUM.join(', ')}`,
+    message: `Required`,
   }),
   level: z.string().refine((level: string) => LEVEL_ENUM.includes(level), {
-    message: `level must be ${LEVEL_ENUM.join(', ')}`,
+    message: `Required`,
   }),
 });
 
 export const updateResumeLanguageLevelSchema = z.object({
   level: z.string().refine((level: string) => LEVEL_ENUM.includes(level), {
-    message: `level must be ${LEVEL_ENUM.join(', ')}`,
+    message: `Required`,
   }),
 });
 

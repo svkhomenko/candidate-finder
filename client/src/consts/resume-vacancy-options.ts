@@ -40,4 +40,18 @@ const educationOptions = [
   },
 ];
 
-export { contractOptions, educationOptions };
+const SALARY_VALUE = '1';
+const SALARY_RANGE = '2';
+
+const salaryOptions = [
+  {
+    value: SALARY_VALUE,
+    label: 'Значення',
+  },
+  {
+    value: SALARY_RANGE,
+    label: 'Діапазон',
+  },
+];
+
+export { contractOptions, educationOptions, salaryOptions, SALARY_VALUE, SALARY_RANGE };
