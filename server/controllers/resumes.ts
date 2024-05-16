@@ -5,6 +5,7 @@ import recommendations from '../recommendation/recommendation';
 import { RESUME } from '../consts/const';
 import { User, Language } from '@prisma/client';
 import { getPageOptions } from '../utils/query-options';
+import ClientError from '../types/error';
 
 const resume = prisma.resume;
 const resumeLanguageLevel = prisma.resumeLanguageLevel;
@@ -93,6 +94,16 @@ const getResumeLanguageLevels = async (req: Request, res: Response) => {
 const createResumeLanguageLevel = async (req: Request, res: Response) => {
   const data = req.body;
   const resumeId = Number(req.params.id);
+
+  const exists = await resumeLanguageLevel.findFirst({
+    where: {
+      language: data.language,
+      resumeId: resumeId,
+    },
+  });
+  if (exists) {
+    throw new ClientError(`The ${data.language} language already exists.`, 400);
+  }
 
   const newResumeLanguageLevel = await resumeLanguageLevel.create({
     data: { ...data, resumeId },
