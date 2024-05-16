@@ -69,6 +69,7 @@ const ResumesList = ({
         <Loader />
       ) : data?.resumes.length ? (
         <VStack rowGap={5}>
+          {isProfileResumes && <Heading size="lg">Мої резюме</Heading>}
           {data?.resumes.map((resume) => (
             <ResumeCard key={resume.id} resume={resume} />
           ))}
