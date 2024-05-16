@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardBody, Stack, Heading, Text, Flex, Button, Icon } from '@chakra-ui/react';
+import { Card, CardHeader, CardBody, Stack, Heading, Text, Flex, Button } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetResumeQuery } from '~/store/api/resume-slice';
@@ -11,6 +11,7 @@ import {
   getOnlineStr,
 } from '~/components/VacancyResumeCard/helpers';
 import UpdateResume from './UpdateResume';
+import DeleteResume from './DeleteResume';
 import ResumeLanguages from './ResumeLanguages';
 import Layout from '~/components/Layout';
 import PageAlert from '~/components/PageAlert';
@@ -46,16 +47,15 @@ const ResumePage = () => {
           <Card sx={styles.card} variant="outline">
             <CardHeader>
               <Flex flexDir="row">
-                <Flex flexDir="column" flexGrow="1">
-                  <Heading mt="4" size="lg">
-                    {resume.title}
-                  </Heading>
-                </Flex>
+                <Heading mt="4" size="lg" flexGrow="1">
+                  {resume.title}
+                </Heading>
                 {Number(user.id) === resume.userId && (
-                  <Flex>
-                    <Button onClick={() => setIsEdit(true)} leftIcon={<Icon as={FiEdit} />}>
-                      Редагувати
+                  <Flex gap="5px">
+                    <Button onClick={() => setIsEdit(true)}>
+                      <FiEdit />
                     </Button>
+                    <DeleteResume />
                   </Flex>
                 )}
               </Flex>
