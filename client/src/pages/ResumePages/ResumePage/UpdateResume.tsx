@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import useRequestHandler from '~/hooks/use-request-handler';
 import { useUpdateResumeMutation } from '~/store/api/resume-slice';
-import { createSchema } from '~/validation/resumes';
+import { updateSchema } from '~/validation/resumes';
 import type { IUpdate } from '~/validation/resumes';
 import Layout from '~/components/Layout';
 import styles from '../resume-card.styles';
@@ -44,7 +44,7 @@ const UpdateResume = ({ resume, setIsEdit }: IProps) => {
     setValue,
     getValues,
   } = useForm<IUpdate>({
-    resolver: zodResolver(createSchema),
+    resolver: zodResolver(updateSchema),
     defaultValues,
   });
 
