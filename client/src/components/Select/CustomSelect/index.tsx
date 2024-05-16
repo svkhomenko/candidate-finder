@@ -28,7 +28,6 @@ const CustomSelect = (props: any) => {
           primary75: green100,
         },
       })}
-      menuPortalTarget={document.body}
     />
   );
 };

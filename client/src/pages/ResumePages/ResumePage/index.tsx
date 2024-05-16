@@ -11,6 +11,7 @@ import {
   getOnlineStr,
 } from '~/components/VacancyResumeCard/helpers';
 import UpdateResume from './UpdateResume';
+import ResumeLanguages from './ResumeLanguages';
 import Layout from '~/components/Layout';
 import PageAlert from '~/components/PageAlert';
 import Loader from '~/components/Loader';
@@ -73,6 +74,8 @@ const ResumePage = () => {
                   Опис вакансії
                 </Heading>
                 <Text whiteSpace="pre-line">{resume.description}</Text>
+
+                <ResumeLanguages isCurUser={Number(user.id) === resume.userId} />
               </Stack>
             </CardBody>
           </Card>

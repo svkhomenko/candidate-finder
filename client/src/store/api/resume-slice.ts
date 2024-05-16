@@ -46,7 +46,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ['Resume', 'Recommendations'],
     }),
     getResumeLanguageLevels: builder.query<ResumeLanguageLevel[], number>({
-      query: (id) => `/resumes/${id}`,
+      query: (id) => `/resumes/${id}/languages`,
       providesTags: (_result, _error, arg) => [{ type: 'ResumeLanguageLevel', id: arg }],
     }),
     createResumeLanguageLevel: builder.mutation<ResumeLanguageLevel, ICreateResumeLanguageLevel & Pick<Resume, 'id'>>({
