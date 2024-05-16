@@ -111,7 +111,7 @@ const UpdateResume = ({ resume, setIsEdit }: IProps) => {
               <ContractInput errors={errors} setValue={setValue} contract={resume.contract} />
 
               <Button type="submit" w="200px" colorScheme="green" isLoading={isLoading}>
-                Зберігти
+                Зберегти
               </Button>
             </VStack>
           </form>

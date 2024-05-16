@@ -83,7 +83,7 @@ const ProfileForm = ({ setIsEdit }: IProps) => {
               <FormErrorMessage>{errors.phoneNumber?.message}</FormErrorMessage>
             </FormControl>
             <Button type="submit" w="200px" isLoading={isLoading}>
-              Зберігти
+              Зберегти
             </Button>
           </VStack>
         </form>
