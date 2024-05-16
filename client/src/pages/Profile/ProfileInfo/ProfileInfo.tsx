@@ -59,7 +59,7 @@ const ProfileInfo = ({ setIsEdit }: IProps) => {
                 <Button variant="outline">Власні вакансії</Button>
               </Link>
             ) : (
-              <Link isExternal href="/profile/vacancies">
+              <Link isExternal href="/profile/resumes">
                 <Button variant="outline">Власні резюме</Button>
               </Link>
             )}
