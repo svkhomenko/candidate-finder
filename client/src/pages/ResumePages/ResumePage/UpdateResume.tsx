@@ -13,13 +13,12 @@ import {
   Switch,
   HStack,
 } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import useCustomToast from '~/hooks/use-custom-toast';
-import { useCreateResumeMutation } from '~/store/api/resume-slice';
+import useRequestHandler from '~/hooks/use-request-handler';
+import { useUpdateResumeMutation } from '~/store/api/resume-slice';
 import { createSchema } from '~/validation/resumes';
-import type { ICreate } from '~/validation/resumes';
+import type { IUpdate } from '~/validation/resumes';
 import Layout from '~/components/Layout';
 import styles from '../resume-card.styles';
 import SalaryInput from '~/components/VacancyResumeInputs/SalaryInput';
@@ -27,11 +26,16 @@ import ExperienceInput from '~/components/VacancyResumeInputs/ExperienceInput';
 import EducationInput from '~/components/VacancyResumeInputs/EducationInput';
 import ContractInput from '~/components/VacancyResumeInputs/ContractInput';
 import LocationInput from '~/components/PlacesSearch/LocationInput';
+import { Resume } from '~/types/resume';
 
-const ResumeCreate = () => {
-  const [create, { isLoading }] = useCreateResumeMutation();
-  const navigate = useNavigate();
-  const { toast } = useCustomToast();
+type IProps = {
+  resume: Resume;
+  setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const UpdateResume = ({ resume, setIsEdit }: IProps) => {
+  const [update, { isLoading }] = useUpdateResumeMutation();
+  const { id, userId, ...defaultValues } = resume;
 
   const {
     register,
@@ -39,25 +43,28 @@ const ResumeCreate = () => {
     formState: { errors },
     setValue,
     getValues,
-  } = useForm<ICreate>({
+  } = useForm<IUpdate>({
     resolver: zodResolver(createSchema),
+    defaultValues,
   });
 
-  const onSubmit = async (data: ICreate) => {
-    try {
-      const { id } = await create(data).unwrap();
-      toast('Резюме успішно створено', 'success');
-      navigate(`/resumes/${id}`);
-    } catch (error: any) {
-      toast(error.data.message, 'error');
-    }
+  const { handler: updateHandler } = useRequestHandler<IUpdate & { id: number }>({
+    f: update,
+    successF: () => {
+      setIsEdit(false);
+    },
+    successMsg: 'Резюме успішно оновлено.',
+  });
+
+  const onSubmit = async (data: IUpdate) => {
+    await updateHandler({ ...data, id: resume.id });
   };
 
   return (
     <Layout>
       <Card sx={styles.card} variant="outline">
         <CardHeader>
-          <Heading sx={styles.heading}>Створити резюме</Heading>
+          <Heading sx={styles.heading}>Редагувати резюме</Heading>
         </CardHeader>
 
         <CardBody>
@@ -79,10 +86,17 @@ const ResumeCreate = () => {
                 <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
               </FormControl>
 
-              <SalaryInput errors={errors} register={register} setValue={setValue} getValues={getValues} />
-              <ExperienceInput errors={errors} register={register} setValue={setValue} />
-              <EducationInput errors={errors} setValue={setValue} />
-              <LocationInput errors={errors} setValue={setValue} />
+              <SalaryInput
+                errors={errors}
+                register={register}
+                setValue={setValue}
+                getValues={getValues}
+                salaryMin={resume.salaryMin}
+                salaryMax={resume.salaryMax}
+              />
+              <ExperienceInput errors={errors} register={register} setValue={setValue} experience={resume.experience} />
+              <EducationInput errors={errors} setValue={setValue} education={resume.education} />
+              <LocationInput errors={errors} setValue={setValue} storedAddress={resume.address} />
 
               <FormControl isInvalid={!!errors.online}>
                 <HStack alignContent="center">
@@ -94,17 +108,10 @@ const ResumeCreate = () => {
                 <FormErrorMessage>{errors.online?.message}</FormErrorMessage>
               </FormControl>
 
-              <ContractInput errors={errors} setValue={setValue} />
+              <ContractInput errors={errors} setValue={setValue} contract={resume.contract} />
 
-              <Button
-                type="submit"
-                w="200px"
-                colorScheme="green"
-                isLoading={isLoading}
-                spinnerPlacement="end"
-                loadingText="Submitting"
-              >
-                Створити
+              <Button type="submit" w="200px" colorScheme="green" isLoading={isLoading}>
+                Зберігти
               </Button>
             </VStack>
           </form>
@@ -114,4 +121,4 @@ const ResumeCreate = () => {
   );
 };
 
-export default ResumeCreate;
+export default UpdateResume;

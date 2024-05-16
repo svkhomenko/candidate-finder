@@ -6,9 +6,20 @@ import type { ICreate } from '~/validation/resumes';
 type IProps = {
   errors: FieldErrors<ICreate>;
   setValue: UseFormSetValue<ICreate>;
+  contract?: string;
 };
 
-const ContractInput = ({ errors, setValue }: IProps) => {
+const ContractInput = ({ errors, setValue, contract }: IProps) => {
+  const getDefaultValue = () => {
+    if (contract) {
+      if (contract === 'any') {
+        return ['full_time', 'part_time'];
+      }
+      return [contract];
+    }
+    return [];
+  };
+
   const onCheckboxChange = (value: (string | number)[]) => {
     if (value.length === 0) {
       setValue('contract', '', { shouldValidate: true });
@@ -22,7 +33,7 @@ const ContractInput = ({ errors, setValue }: IProps) => {
   return (
     <FormControl isInvalid={!!errors.contract}>
       <FormLabel htmlFor="contract">Вид зайнятості</FormLabel>
-      <CheckboxGroup colorScheme="green" onChange={onCheckboxChange}>
+      <CheckboxGroup colorScheme="green" onChange={onCheckboxChange} defaultValue={getDefaultValue()}>
         <VStack spacing={2} alignItems="start">
           {contractOptions.map((cOpt) => (
             <Checkbox key={cOpt.value} value={cOpt.value}>

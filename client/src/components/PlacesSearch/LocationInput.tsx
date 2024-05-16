@@ -11,11 +11,12 @@ const libraries: Libraries = ['places'];
 type IProps = {
   errors: FieldErrors<ICreate>;
   setValue: UseFormSetValue<ICreate>;
+  storedAddress?: string;
 };
 
-function LocationInput({ errors, setValue }: IProps) {
+function LocationInput({ errors, setValue, storedAddress }: IProps) {
   const [searchBox, setSearchBox] = useState<google.maps.places.Autocomplete>();
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState(storedAddress ? storedAddress : '');
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY,

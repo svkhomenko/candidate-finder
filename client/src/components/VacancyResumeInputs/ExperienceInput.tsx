@@ -1,17 +1,25 @@
-import { FormControl, FormErrorMessage, FormLabel, Input, Checkbox } from '@chakra-ui/react';
+import { FormControl, FormErrorMessage, FormLabel, Input, Checkbox, Box } from '@chakra-ui/react';
 import { useState } from 'react';
 import type { FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 import type { ChangeEvent } from 'react';
-import type { ICreate } from '~/validation/resumes';
+import type { ICreate, IUpdate } from '~/validation/resumes';
 
 type IProps = {
-  errors: FieldErrors<ICreate>;
-  register: UseFormRegister<ICreate>;
-  setValue: UseFormSetValue<ICreate>;
+  errors: FieldErrors<ICreate> | FieldErrors<IUpdate>;
+  register: UseFormRegister<ICreate> | UseFormRegister<IUpdate>;
+  setValue: UseFormSetValue<ICreate> | UseFormSetValue<IUpdate>;
+  experience?: number;
 };
 
-const ExperienceInput = ({ errors, register, setValue }: IProps) => {
-  const [isWithoutExpirience, setIsWithoutExpirience] = useState(false);
+const ExperienceInput = ({ errors, register, setValue, experience }: IProps) => {
+  const [isWithoutExpirience, setIsWithoutExpirience] = useState(getIsWithoutExpirience());
+
+  function getIsWithoutExpirience() {
+    if (experience === undefined) {
+      return false;
+    }
+    return experience === 0;
+  }
 
   const onCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
     setIsWithoutExpirience(e.target.checked);
@@ -19,7 +27,7 @@ const ExperienceInput = ({ errors, register, setValue }: IProps) => {
   };
 
   return (
-    <>
+    <Box>
       <FormControl isInvalid={!!errors.experience}>
         <FormLabel htmlFor="experience">Роки досвіду роботи</FormLabel>
         {!isWithoutExpirience && (
@@ -36,10 +44,15 @@ const ExperienceInput = ({ errors, register, setValue }: IProps) => {
           </>
         )}
       </FormControl>
-      <Checkbox value="withoutExpirience" onChange={onCheckboxChange}>
+      <Checkbox
+        value="withoutExpirience"
+        onChange={onCheckboxChange}
+        defaultChecked={getIsWithoutExpirience()}
+        marginTop="10px"
+      >
         Без досвіду роботи
       </Checkbox>
-    </>
+    </Box>
   );
 };
 
