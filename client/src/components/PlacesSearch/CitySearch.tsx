@@ -22,6 +22,7 @@ function CitySearch({ setPlaceId }: IProps) {
 
   const handleChangeAddress = (e: SyntheticEvent) => {
     setAddress((e.target as HTMLInputElement).value);
+    setPlaceId('');
   };
 
   const onLoad = (ref: google.maps.places.Autocomplete) => {
