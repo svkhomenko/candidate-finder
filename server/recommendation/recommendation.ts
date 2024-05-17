@@ -1,13 +1,13 @@
 import ResumeService from '../services/resume';
 import VacancyService from '../services/vacancy';
 import textProcessing, { tokeniseAndStemmed, getTermDocumentMatrix } from './text-processing';
-import kmeans from './clusterization/k-mean';
 import ClientError from '../types/error';
 import { RESUME, VACANCY } from '../consts/const';
 import { IDocument, IProcessedDocument, IRecommendatedResume, IDocumentType } from './types';
 import { IKmeanResult } from './clusterization/k-mean';
 import cosineSimilarity from './clusterization/cosine-similarity';
 import { Resume, Vacancy } from '@prisma/client';
+import silhouette from './silhouette/silhouette';
 
 async function getAllDocuments(): Promise<Array<IDocument>> {
   let resumes = await ResumeService.getAllDescriptions();
@@ -29,7 +29,6 @@ class Recommendations {
   documents: Array<IProcessedDocument>;
   termDocumentMatrix: Array<Array<number>>;
   kmeansResult: IKmeanResult;
-  k = 2;
 
   constructor() {
     this.initRecommendation();
@@ -40,7 +39,7 @@ class Recommendations {
     let result = textProcessing(docs);
     this.documents = result.documents;
     this.termDocumentMatrix = result.termDocumentMatrix;
-    this.kmeansResult = kmeans(this.termDocumentMatrix, this.k);
+    this.kmeansResult = silhouette(this.termDocumentMatrix);
   }
 
   getRecommendatedResumesDocuments(vacancyIndex: number) {
@@ -170,9 +169,7 @@ class Recommendations {
     let result = getTermDocumentMatrix(docs);
     this.documents = result.documents;
     this.termDocumentMatrix = result.termDocumentMatrix;
-    this.kmeansResult = kmeans(this.termDocumentMatrix, this.k);
-    console.log(this.documents);
-    console.log(this.kmeansResult);
+    this.kmeansResult = silhouette(this.termDocumentMatrix);
   }
 }
 
