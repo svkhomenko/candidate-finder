@@ -56,6 +56,7 @@ const getVacancyRecommendation = async (req: Request, res: Response) => {
     return {
       ...r,
       ratingScore: recommendatedResume.ratingScore,
+      badges: recommendatedResume.badges,
     };
   });
 

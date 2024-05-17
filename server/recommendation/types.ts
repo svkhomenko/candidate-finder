@@ -17,4 +17,5 @@ export type IProcessedDocument = {
 export type IRecommendatedResume = {
   id: number;
   ratingScore: number;
+  badges: string[];
 };

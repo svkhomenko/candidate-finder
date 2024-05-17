@@ -103,6 +103,7 @@ class Recommendations {
       recommendatedResumes.push({
         id: resume.id,
         ratingScore: ratingScore,
+        badges: [],
       });
     }
 
