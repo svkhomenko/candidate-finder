@@ -1,6 +1,7 @@
 import { Education, Contract, Language, Level } from './resume-vacancy-enums';
+import { RecomendedResume } from './resume';
 
-export type Resume = {
+export type Vacancy = {
   id: number;
   title: string;
   description: string;
@@ -15,12 +16,17 @@ export type Resume = {
   userId: number;
 };
 
-export type ResumesResponse = {
-  resumes: Resume[];
+export type VacanciesResponse = {
+  vacancies: Vacancy[];
   totalCount: number;
 };
 
-export type ResumesParam = {
+export type VacanciesRecommendationResponse = {
+  recomendedResumes: RecomendedResume[];
+  totalCount: number;
+};
+
+export type VacanciesParam = {
   _start: number;
   _end: number;
   userId?: number;
@@ -35,12 +41,8 @@ export type ResumesParam = {
   contract?: Contract[];
 };
 
-export type ResumeLanguageLevel = {
+export type VacancyLanguageLevel = {
   language: Language;
-  resumeId: number;
+  vacancyId: number;
   level: Level;
-};
-
-export type RecomendedResume = Resume & {
-  ratingScore: number;
 };
