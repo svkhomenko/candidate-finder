@@ -60,6 +60,10 @@ const getVacancyRecommendation = async (req: Request, res: Response) => {
     };
   });
 
+  result.sort(function (resumeA, resumeB) {
+    return resumeB.ratingScore - resumeA.ratingScore;
+  });
+
   res.header('X-Total-Count', `${recommendatedResumes.length}`).json(result);
 };
 
