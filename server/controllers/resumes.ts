@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import prisma from '../lib/prisma';
 import ResumeService from '../services/resume';
+import ResumeLanguageLevelService from '../services/resume-language-level';
 import recommendations from '../recommendation/recommendation';
 import { RESUME } from '../consts/const';
 import { User, Language } from '@prisma/client';
@@ -95,15 +96,7 @@ const createResumeLanguageLevel = async (req: Request, res: Response) => {
   const data = req.body;
   const resumeId = Number(req.params.id);
 
-  const exists = await resumeLanguageLevel.findFirst({
-    where: {
-      language: data.language,
-      resumeId: resumeId,
-    },
-  });
-  if (exists) {
-    throw new ClientError(`The ${data.language} language already exists.`, 400);
-  }
+  await ResumeLanguageLevelService.checkIfExist(data.language, resumeId);
 
   const newResumeLanguageLevel = await resumeLanguageLevel.create({
     data: { ...data, resumeId },
@@ -119,6 +112,8 @@ const updateResumeLanguageLevel = async (req: Request, res: Response) => {
   const resumeId = Number(req.params.id);
   const language = req.params.language as Language;
 
+  await ResumeLanguageLevelService.findOneOrThrow(language, resumeId);
+
   const updatedResumeLanguageLevel = await resumeLanguageLevel.update({
     where: { language_resumeId: { resumeId, language } },
     data,
@@ -132,6 +127,8 @@ const updateResumeLanguageLevel = async (req: Request, res: Response) => {
 const deleteResumeLanguageLevel = async (req: Request, res: Response) => {
   const resumeId = Number(req.params.id);
   const language = req.params.language as Language;
+
+  await ResumeLanguageLevelService.findOneOrThrow(language, resumeId);
 
   await resumeLanguageLevel.delete({
     where: { language_resumeId: { resumeId, language } },
