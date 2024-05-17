@@ -1,13 +1,22 @@
 import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import type { FieldErrors, UseFormSetValue } from 'react-hook-form';
-import type { ICreate, IUpdate } from '~/validation/resumes';
 import CustomSelect from '~/components/Select/CustomSelect';
 import { educationOptions } from '~/consts/resume-vacancy-options';
+import type { ICreate as ICreateResume, IUpdate as IUpdateResume } from '~/validation/resumes';
+import type { ICreate as ICreateVacancy, IUpdate as IUpdateVacancy } from '~/validation/vacancies';
 
 type IProps = {
-  errors: FieldErrors<ICreate> | FieldErrors<IUpdate>;
-  setValue: UseFormSetValue<ICreate> | UseFormSetValue<IUpdate>;
+  errors:
+    | FieldErrors<ICreateResume>
+    | FieldErrors<IUpdateResume>
+    | FieldErrors<ICreateVacancy>
+    | FieldErrors<IUpdateVacancy>;
+  setValue:
+    | UseFormSetValue<ICreateResume>
+    | UseFormSetValue<IUpdateResume>
+    | UseFormSetValue<ICreateVacancy>
+    | UseFormSetValue<IUpdateVacancy>;
   education?: string;
 };
 

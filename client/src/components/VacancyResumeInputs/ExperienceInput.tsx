@@ -2,12 +2,25 @@ import { FormControl, FormErrorMessage, FormLabel, Input, Checkbox, Box } from '
 import { useState } from 'react';
 import type { FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 import type { ChangeEvent } from 'react';
-import type { ICreate, IUpdate } from '~/validation/resumes';
+import type { ICreate as ICreateResume, IUpdate as IUpdateResume } from '~/validation/resumes';
+import type { ICreate as ICreateVacancy, IUpdate as IUpdateVacancy } from '~/validation/vacancies';
 
 type IProps = {
-  errors: FieldErrors<ICreate> | FieldErrors<IUpdate>;
-  register: UseFormRegister<ICreate> | UseFormRegister<IUpdate>;
-  setValue: UseFormSetValue<ICreate> | UseFormSetValue<IUpdate>;
+  errors:
+    | FieldErrors<ICreateResume>
+    | FieldErrors<IUpdateResume>
+    | FieldErrors<ICreateVacancy>
+    | FieldErrors<IUpdateVacancy>;
+  register:
+    | UseFormRegister<ICreateResume>
+    | UseFormRegister<IUpdateResume>
+    | UseFormRegister<ICreateVacancy>
+    | UseFormRegister<IUpdateVacancy>;
+  setValue:
+    | UseFormSetValue<ICreateResume>
+    | UseFormSetValue<IUpdateResume>
+    | UseFormSetValue<ICreateVacancy>
+    | UseFormSetValue<IUpdateVacancy>;
   experience?: number;
 };
 

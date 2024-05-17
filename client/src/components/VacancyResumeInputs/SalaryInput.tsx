@@ -1,15 +1,32 @@
 import { FormControl, FormErrorMessage, FormLabel, Input, VStack, Radio, RadioGroup, HStack } from '@chakra-ui/react';
 import { useState } from 'react';
 import type { FieldErrors, UseFormRegister, UseFormSetValue, UseFormGetValues } from 'react-hook-form';
-import type { ICreate, IUpdate } from '~/validation/resumes';
 import { salaryOptions, SALARY_VALUE, SALARY_RANGE } from '~/consts/resume-vacancy-options';
 import type { ChangeEvent } from 'react';
+import type { ICreate as ICreateResume, IUpdate as IUpdateResume } from '~/validation/resumes';
+import type { ICreate as ICreateVacancy, IUpdate as IUpdateVacancy } from '~/validation/vacancies';
 
 type IProps = {
-  errors: FieldErrors<ICreate> | FieldErrors<IUpdate>;
-  register: UseFormRegister<ICreate> | UseFormRegister<IUpdate>;
-  setValue: UseFormSetValue<ICreate> | UseFormSetValue<IUpdate>;
-  getValues: UseFormGetValues<ICreate> | UseFormGetValues<IUpdate>;
+  errors:
+    | FieldErrors<ICreateResume>
+    | FieldErrors<IUpdateResume>
+    | FieldErrors<ICreateVacancy>
+    | FieldErrors<IUpdateVacancy>;
+  register:
+    | UseFormRegister<ICreateResume>
+    | UseFormRegister<IUpdateResume>
+    | UseFormRegister<ICreateVacancy>
+    | UseFormRegister<IUpdateVacancy>;
+  setValue:
+    | UseFormSetValue<ICreateResume>
+    | UseFormSetValue<IUpdateResume>
+    | UseFormSetValue<ICreateVacancy>
+    | UseFormSetValue<IUpdateVacancy>;
+  getValues:
+    | UseFormGetValues<ICreateResume>
+    | UseFormGetValues<IUpdateResume>
+    | UseFormGetValues<ICreateVacancy>
+    | UseFormGetValues<IUpdateVacancy>;
   salaryMin?: number;
   salaryMax?: number;
 };

@@ -1,11 +1,12 @@
 import { FormControl, FormErrorMessage, FormLabel, Checkbox, CheckboxGroup, VStack } from '@chakra-ui/react';
 import type { FieldErrors, UseFormSetValue } from 'react-hook-form';
 import { contractOptions } from '~/consts/resume-vacancy-options';
-import type { ICreate } from '~/validation/resumes';
+import type { ICreate as ICreateResume } from '~/validation/resumes';
+import type { ICreate as ICreateVacancy } from '~/validation/vacancies';
 
 type IProps = {
-  errors: FieldErrors<ICreate>;
-  setValue: UseFormSetValue<ICreate>;
+  errors: FieldErrors<ICreateResume> | FieldErrors<ICreateVacancy>;
+  setValue: UseFormSetValue<ICreateResume> | UseFormSetValue<ICreateVacancy>;
   contract?: string;
 };
 
