@@ -1,12 +1,17 @@
 import { Route, Routes } from 'react-router-dom';
-import VacancyPage from '~/pages/VacancyPages/VacancyPage';
-import VacancyCreateForm from '~/pages/VacancyPages/VacancyCreate/VacancyCreateForm';
+import VacanciesPage from '~/pages/VacancyPages/VacanciesPage';
+// import HRsRoute from '~/components/ProtectedRoute/HRsRoute';
+// import VacancyPage from '~/pages/VacancyPages/VacancyPage';
+// import CreateVacancy from '~/pages/VacancyPages/CreateVacancy';
 import NotFound from '~/pages/NotFound/NotFound';
 
 const VacanciesRoutes = () => (
   <Routes>
-    <Route path="/:id" element={<VacancyPage />} />
-    <Route path="/create" element={<VacancyCreateForm />} />
+    <Route index element={<VacanciesPage />} />
+    {/* <Route path="/:id" element={<VacancyPage />} />
+    <Route element={<HRsRoute />}>
+      <Route path="/create" element={<CreateVacancy />} />
+    </Route> */}
     <Route path="/*" element={<NotFound />} />
   </Routes>
 );
