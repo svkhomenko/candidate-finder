@@ -19,6 +19,7 @@ import {
   getOnlineStr,
   educationTranslation,
   contractTranslation,
+  getFormattedRatingScore,
 } from './helpers';
 import type { Resume, RecommendatedResume } from '~/types/resume';
 import styles from './vacancy-resume-card.styles';
@@ -37,7 +38,7 @@ const ResumeCard = ({ resume }: Props) => {
   return (
     <ReactRouterLink to={`/resumes/${resume.id}`}>
       <Card sx={styles.card}>
-        {isRecResume && <Circle sx={styles.ratingScore}>{resume.ratingScore}%</Circle>}
+        {isRecResume && <Circle sx={styles.ratingScore}>{getFormattedRatingScore(resume.ratingScore)}%</Circle>}
 
         <CardBody>
           <Stack spacing="3">

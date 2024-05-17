@@ -42,6 +42,13 @@ function getOnlineStr(online: boolean) {
   return '';
 }
 
+function getFormattedRatingScore(ratingScore: number) {
+  return new Intl.NumberFormat('uk', {
+    currency: 'UAH',
+    maximumFractionDigits: 0,
+  }).format(ratingScore * 100);
+}
+
 const educationTranslation = {
   basic_general: 'Базова середня освіта',
   complete_general: 'Повна загальна середня освіта',
@@ -266,6 +273,7 @@ export {
   getYearWord,
   getExpirienceStr,
   getOnlineStr,
+  getFormattedRatingScore,
   educationTranslation,
   contractTranslation,
   languageTranslation,
