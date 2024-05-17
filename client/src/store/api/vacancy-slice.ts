@@ -12,7 +12,7 @@ import type {
   VacanciesRecommendationResponse,
   VacancyLanguageLevel,
 } from '~/types/vacancy';
-import type { RecomendedResume } from '~/types/resume';
+import type { RecommendatedResume } from '~/types/resume';
 import { prepareSearchParams } from './prepare-search-params';
 
 export const extendedApiSlice = apiSlice.injectEndpoints({
@@ -39,8 +39,8 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         url: `/vacancies/${id}/recommendation`,
         params: prepareSearchParams(queryParams),
       }),
-      transformResponse(recomendedResumes: RecomendedResume[], meta: any) {
-        return { recomendedResumes, totalCount: Number(meta.response.headers.get('X-Total-Count')) };
+      transformResponse(recommendatedResume: RecommendatedResume[], meta: any) {
+        return { recommendatedResume, totalCount: Number(meta.response.headers.get('X-Total-Count')) };
       },
       providesTags: (_result, _error, arg) => [{ type: 'Recommendations', id: arg.id }],
     }),

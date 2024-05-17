@@ -7,10 +7,10 @@ import {
   CardProps,
   Grid,
   GridItem,
-  // Circle,
-  // Tag,
-  // Wrap,
-  // WrapItem,
+  Circle,
+  Tag,
+  Wrap,
+  WrapItem,
 } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import {
@@ -20,33 +20,32 @@ import {
   educationTranslation,
   contractTranslation,
 } from './helpers';
-import type { Resume } from '~/types/resume';
+import type { Resume, RecommendatedResume } from '~/types/resume';
 import styles from './vacancy-resume-card.styles';
 
 type Props = {
-  resume: Resume;
+  resume: Resume | RecommendatedResume;
 } & CardProps;
 
-// const isRecomendedResume = (o: any): o is RecomendedResume => {
-//   return o && o.hasOwnProperty('ratingScore');
-// };
+const isRecommendatedResume = (o: any): o is RecommendatedResume => {
+  return o && o.hasOwnProperty('ratingScore');
+};
 
 const ResumeCard = ({ resume }: Props) => {
-  // const isRecResume = isRecomendedResume(vacancy);
+  const isRecResume = isRecommendatedResume(resume);
 
   return (
     <ReactRouterLink to={`/resumes/${resume.id}`}>
       <Card sx={styles.card}>
-        {/* {isRecResume && <Circle sx={styles.ratingScore}>{resume.ratingScore}%</Circle>} */}
+        {isRecResume && <Circle sx={styles.ratingScore}>{resume.ratingScore}%</Circle>}
 
         <CardBody>
           <Stack spacing="3">
-            <Heading size="md" width="100%">
-              {/* <Heading size="md" width={isRecResume ? 'calc(100% - 40px)' : '100%'}> */}
+            <Heading size="md" width={isRecResume ? 'calc(100% - 40px)' : '100%'}>
               {resume.title}
             </Heading>
 
-            {/* {isRecResume && resume.badges.length && (
+            {isRecResume && resume.badges.length && (
               <Wrap>
                 {resume.badges.map((badge) => (
                   <WrapItem>
@@ -56,7 +55,7 @@ const ResumeCard = ({ resume }: Props) => {
                   </WrapItem>
                 ))}
               </Wrap>
-            )} */}
+            )}
 
             <Grid templateRows="repeat(3, 1fr)" templateColumns="repeat(2, 1fr)" gap={2}>
               <GridItem colSpan={1}>

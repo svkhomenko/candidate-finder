@@ -13,6 +13,7 @@ import {
 import UpdateVacancy from './UpdateVacancy';
 import DeleteVacancy from './DeleteVacancy';
 import VacancyLanguages from './VacancyLanguages';
+import RecommendatedResumes from './RecommendatedResumes';
 import Layout from '~/components/Layout';
 import PageAlert from '~/components/PageAlert';
 import Loader from '~/components/Loader';
@@ -43,43 +44,46 @@ const VacancyPage = () => {
       {isEdit ? (
         <UpdateVacancy vacancy={vacancy} setIsEdit={setIsEdit} />
       ) : (
-        <Layout>
-          <Card sx={styles.card} variant="outline">
-            <CardHeader>
-              <Flex flexDir="row">
-                <Heading mt="4" size="lg" flexGrow="1">
-                  {vacancy.title}
-                </Heading>
-                {Number(user.id) === vacancy.userId && (
-                  <Flex gap="5px">
-                    <Button onClick={() => setIsEdit(true)}>
-                      <FiEdit />
-                    </Button>
-                    <DeleteVacancy />
-                  </Flex>
-                )}
-              </Flex>
-            </CardHeader>
+        <>
+          <Layout>
+            <Card sx={styles.card} variant="outline">
+              <CardHeader>
+                <Flex flexDir="row">
+                  <Heading mt="4" size="lg" flexGrow="1">
+                    {vacancy.title}
+                  </Heading>
+                  {Number(user.id) === vacancy.userId && (
+                    <Flex gap="5px">
+                      <Button onClick={() => setIsEdit(true)}>
+                        <FiEdit />
+                      </Button>
+                      <DeleteVacancy />
+                    </Flex>
+                  )}
+                </Flex>
+              </CardHeader>
 
-            <CardBody>
-              <Stack spacing="3">
-                <Text color="green.800">{getFormattedSalary(vacancy.salaryMin, vacancy.salaryMax)} грн</Text>
-                <Text color="green.800">{vacancy.address}</Text>
-                <Text color="green.800">{getExpirienceStr(vacancy.experience)}</Text>
-                <Text color="green.800">{educationTranslation[vacancy.education]}</Text>
-                <Text color="green.800">{contractTranslation[vacancy.contract]}</Text>
-                <Text color="green.800">{getOnlineStr(vacancy.online)}</Text>
+              <CardBody>
+                <Stack spacing="3">
+                  <Text color="green.800">{getFormattedSalary(vacancy.salaryMin, vacancy.salaryMax)} грн</Text>
+                  <Text color="green.800">{vacancy.address}</Text>
+                  <Text color="green.800">{getExpirienceStr(vacancy.experience)}</Text>
+                  <Text color="green.800">{educationTranslation[vacancy.education]}</Text>
+                  <Text color="green.800">{contractTranslation[vacancy.contract]}</Text>
+                  <Text color="green.800">{getOnlineStr(vacancy.online)}</Text>
 
-                <Heading size="md" marginTop="10px">
-                  Опис вакансії
-                </Heading>
-                <Text whiteSpace="pre-line">{vacancy.description}</Text>
+                  <Heading size="md" marginTop="10px">
+                    Опис вакансії
+                  </Heading>
+                  <Text whiteSpace="pre-line">{vacancy.description}</Text>
 
-                <VacancyLanguages isCurUser={Number(user.id) === vacancy.userId} />
-              </Stack>
-            </CardBody>
-          </Card>
-        </Layout>
+                  <VacancyLanguages isCurUser={Number(user.id) === vacancy.userId} />
+                </Stack>
+              </CardBody>
+            </Card>
+          </Layout>
+          {Number(user.id) === vacancy.userId ? <RecommendatedResumes /> : null}
+        </>
       )}
     </>
   );

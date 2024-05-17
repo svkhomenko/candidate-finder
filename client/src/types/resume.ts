@@ -41,6 +41,7 @@ export type ResumeLanguageLevel = {
   level: Level;
 };
 
-export type RecomendedResume = Resume & {
+export type RecommendatedResume = Resume & {
   ratingScore: number;
+  badges: string[];
 };
