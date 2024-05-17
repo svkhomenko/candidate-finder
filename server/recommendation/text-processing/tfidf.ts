@@ -45,30 +45,54 @@ function filterNullVectors(
   documents: Array<IProcessedDocument>,
   termDocumentMatrix: Array<Array<number>>,
 ) {
+  const filteredIndexes = [];
+
   const filteredTermDocumentMatrix = termDocumentMatrix.filter((vector, index) => {
     if (vector.every((word) => word === 0)) {
-      let i = documents.findIndex((document) => document.index === index);
-      if (i !== -1) {
-        documents[i].index = -1;
-      }
+      filteredIndexes.push(index);
       return false;
     }
     return true;
   });
 
-  let count = 0;
-  for (let i = 0; i < documents.length; i++) {
-    if (documents[i].index !== -1) {
-      documents[i].index = count;
-      count++;
-    }
-  }
+  const filteredDocuments = documents.filter(
+    (_document, index) => !filteredIndexes.includes(index),
+  );
 
   return {
     termDocumentMatrix: filteredTermDocumentMatrix,
-    documents,
+    documents: filteredDocuments,
   };
 }
+
+// function filterNullVectors(
+//   documents: Array<IProcessedDocument>,
+//   termDocumentMatrix: Array<Array<number>>,
+// ) {
+//   const filteredTermDocumentMatrix = termDocumentMatrix.filter((vector, index) => {
+//     if (vector.every((word) => word === 0)) {
+//       let i = documents.findIndex((document) => document.index === index);
+//       if (i !== -1) {
+//         documents[i].index = -1;
+//       }
+//       return false;
+//     }
+//     return true;
+//   });
+
+//   let count = 0;
+//   for (let i = 0; i < documents.length; i++) {
+//     if (documents[i].index !== -1) {
+//       documents[i].index = count;
+//       count++;
+//     }
+//   }
+
+//   return {
+//     termDocumentMatrix: filteredTermDocumentMatrix,
+//     documents,
+//   };
+// }
 
 const getTermDocumentMatrix = (documents: Array<IProcessedDocument>) => {
   const documentWordArr = documents.map((document) => document.textArr);

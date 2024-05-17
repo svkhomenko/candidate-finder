@@ -10,9 +10,16 @@ export type IProcessedDocument = {
   id: number;
   textArr: string[];
   type: IDocumentType;
-  index: number;
   recommendatedResumes?: Array<IRecommendatedResume>;
 };
+
+// export type IProcessedDocument = {
+//   id: number;
+//   textArr: string[];
+//   type: IDocumentType;
+//   index: number;
+//   recommendatedResumes?: Array<IRecommendatedResume>;
+// };
 
 export type IRecommendatedResume = {
   id: number;
