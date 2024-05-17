@@ -9,7 +9,7 @@ export default function silhouette(termDocumentMatrix: Vectors) {
   // let maxSilhouetteScoreK: number;
   let maxKmeansResult: IKmeanResult;
 
-  for (let k = 2; k <= Math.min(termDocumentMatrix.length - 1, maxK); k++) {
+  for (let k = 2; k <= Math.min(termDocumentMatrix.length / 2, maxK); k++) {
     let kmeansResult = kmeans(termDocumentMatrix, k);
     let silhouetteScore = getSilhouetteScore(termDocumentMatrix, kmeansResult.clusterIndexes);
 
