@@ -5,7 +5,7 @@ class AggressiveTokenizerUa {
     const regex = new RegExp(`(?<=\\s|^)(${stopWords.join('|')})(?=\\s|$)`, 'gi');
 
     return text
-      .replace(/[^a-zа-яґєії’']/gi, ' ')
+      .replace(/[^a-zа-яґєії']/gi, ' ')
       .replace(regex, '')
       .replace(/[\s\n]+/g, ' ')
       .trim();
