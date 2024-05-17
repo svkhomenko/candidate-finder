@@ -1,40 +1,47 @@
 import { Request, Response } from 'express';
 import prisma from '../lib/prisma';
 import VacancyService from '../services/vacancy';
+import VacancyLanguageLevelService from '../services/vacancy-language-level';
 import recommendations from '../recommendation/recommendation';
-import { getPageOptions } from '../utils/query-options';
 import { VACANCY } from '../consts/const';
+import { User, Language } from '@prisma/client';
+import { getPageOptions } from '../utils/query-options';
 
 const vacancy = prisma.vacancy;
 const resume = prisma.resume;
+const vacancyLanguageLevel = prisma.vacancyLanguageLevel;
 
-const createVacancy = async (req: Request, res: Response) => {
-  const data = req.body;
+const getVacancies = async (req: Request, res: Response) => {
+  const where = VacancyService.getWhereOptions(req.query);
 
-  const newVacancy = await vacancy.create({
-    data: data,
-  });
+  const [count, vacancies] = await prisma.$transaction([
+    vacancy.count({ where }),
+    vacancy.findMany({
+      where,
+      ...getPageOptions(req.query),
+    }),
+  ]);
 
-  recommendations.handleCreate(newVacancy, VACANCY);
+  res.header('X-Total-Count', `${count}`).json(vacancies);
+};
 
-  res.status(201).json(newVacancy);
+const getVacancyById = async (req: Request, res: Response) => {
+  const vacancyId = Number(req.params.id);
+
+  const found = await VacancyService.findOneOrThrow(vacancyId);
+
+  res.status(200).json(found);
 };
 
 const getVacancyRecommendation = async (req: Request, res: Response) => {
   const vacancyId = Number(req.params.id);
-  await VacancyService.findOneOrThrow(vacancyId);
 
   const recommendatedResumes = await recommendations.getRecommendatedResumes(vacancyId);
-  const curResumesIds = [];
   const pagination = getPageOptions(req.query);
 
-  for (
-    let i = pagination.skip;
-    i < recommendatedResumes.length && i < pagination.skip + pagination.take;
-    i++
-  ) {
-    curResumesIds.push(recommendatedResumes[i].id);
-  }
+  const curResumesIds = recommendatedResumes
+    .slice(pagination.skip, pagination.skip + pagination.take)
+    .map((recResume) => recResume.id);
 
   const resumes = await resume.findMany({
     where: {
@@ -52,30 +59,44 @@ const getVacancyRecommendation = async (req: Request, res: Response) => {
     };
   });
 
-  res.setHeader('X-Total-Count', recommendatedResumes.length);
-  res.json(result);
+  res.header('X-Total-Count', `${recommendatedResumes.length}`).json(result);
+};
+
+const createVacancy = async (req: Request, res: Response) => {
+  const data = req.body;
+  const { id: userId } = req.user as User;
+
+  const newVacancy = await vacancy.create({
+    data: { ...data, userId },
+  });
+
+  recommendations.handleCreate(newVacancy, VACANCY);
+
+  res.status(201).json(newVacancy);
 };
 
 const updateVacancy = async (req: Request, res: Response) => {
   const data = req.body;
   const vacancyId = Number(req.params.id);
 
-  await VacancyService.findOneOrThrow(vacancyId);
+  const found = await VacancyService.findOneOrThrow(vacancyId);
 
   const updatedVacancy = await vacancy.update({
     where: { id: vacancyId },
     data,
   });
 
-  recommendations.handleUpdate(updatedVacancy, VACANCY);
+  if (data.description && data.description !== found.description) {
+    recommendations.handleUpdate(updatedVacancy, VACANCY);
+  } else {
+    recommendations.handleUpdateWithoutChangingDesc();
+  }
 
   res.status(201).json(updatedVacancy);
 };
 
 const deleteVacancy = async (req: Request, res: Response) => {
   const vacancyId = Number(req.params.id);
-
-  await VacancyService.findOneOrThrow(vacancyId);
 
   const deletedVacancy = await vacancy.delete({
     where: { id: vacancyId },
@@ -86,4 +107,76 @@ const deleteVacancy = async (req: Request, res: Response) => {
   res.status(204).send();
 };
 
-export { createVacancy, getVacancyRecommendation, updateVacancy, deleteVacancy };
+const getVacancyLanguageLevels = async (req: Request, res: Response) => {
+  const vacancyId = Number(req.params.id);
+
+  await VacancyService.findOneOrThrow(vacancyId);
+
+  const vacancyLanguageLevels = await vacancyLanguageLevel.findMany({
+    where: {
+      vacancyId,
+    },
+  });
+
+  res.json(vacancyLanguageLevels);
+};
+
+const createVacancyLanguageLevel = async (req: Request, res: Response) => {
+  const data = req.body;
+  const vacancyId = Number(req.params.id);
+
+  await VacancyLanguageLevelService.checkIfExist(data.language, vacancyId);
+
+  const newVacancyLanguageLevel = await vacancyLanguageLevel.create({
+    data: { ...data, vacancyId },
+  });
+
+  recommendations.handleUpdateWithoutChangingDesc();
+
+  res.status(201).json(newVacancyLanguageLevel);
+};
+
+const updateVacancyLanguageLevel = async (req: Request, res: Response) => {
+  const data = req.body;
+  const vacancyId = Number(req.params.id);
+  const language = req.params.language as Language;
+
+  await VacancyLanguageLevelService.findOneOrThrow(language, vacancyId);
+
+  const updatedVacancyLanguageLevel = await vacancyLanguageLevel.update({
+    where: { language_vacancyId: { vacancyId, language } },
+    data,
+  });
+
+  recommendations.handleUpdateWithoutChangingDesc();
+
+  res.status(201).json(updatedVacancyLanguageLevel);
+};
+
+const deleteVacancyLanguageLevel = async (req: Request, res: Response) => {
+  const vacancyId = Number(req.params.id);
+  const language = req.params.language as Language;
+
+  await VacancyLanguageLevelService.findOneOrThrow(language, vacancyId);
+
+  await vacancyLanguageLevel.delete({
+    where: { language_vacancyId: { vacancyId, language } },
+  });
+
+  recommendations.handleUpdateWithoutChangingDesc();
+
+  res.status(204).send();
+};
+
+export {
+  getVacancies,
+  getVacancyById,
+  getVacancyRecommendation,
+  createVacancy,
+  updateVacancy,
+  deleteVacancy,
+  getVacancyLanguageLevels,
+  createVacancyLanguageLevel,
+  updateVacancyLanguageLevel,
+  deleteVacancyLanguageLevel,
+};
