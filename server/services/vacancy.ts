@@ -49,6 +49,19 @@ const VacancyService = {
     return found;
   },
 
+  async findOneWithLanguagesOrThrow(id: number) {
+    const found = await vacancy.findFirst({
+      where: { id },
+      include: {
+        vacancyLanguageLevels: true,
+      },
+    });
+    if (!found) {
+      throw new ClientError('The vacancy is not found.', 404);
+    }
+    return found;
+  },
+
   getWhereOptions(queryParams: IQueryParams) {
     const where: Prisma.VacancyWhereInput = {};
     const {

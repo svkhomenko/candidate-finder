@@ -39,6 +39,30 @@ const ResumeService = {
     return resumes;
   },
 
+  async getResumesForRecommendationById(
+    resumesIds: Array<number>,
+    vacancyPlace_id: string,
+    vacancyOnline: boolean,
+  ) {
+    const whereOR: Prisma.ResumeWhereInput[] = [{ place_id: vacancyPlace_id }];
+    if (vacancyOnline) {
+      whereOR.push({ online: true });
+    }
+
+    const resumes = await resume.findMany({
+      where: {
+        id: {
+          in: resumesIds,
+        },
+        OR: whereOR,
+      },
+      include: {
+        resumeLanguageLevels: true,
+      },
+    });
+    return resumes;
+  },
+
   async findOneOrThrow(id: number) {
     const found = await resume.findFirst({
       where: { id },

@@ -6,8 +6,9 @@ import { RESUME, VACANCY } from '../consts/const';
 import { IDocument, IProcessedDocument, IDocumentType } from './types';
 import { IKmeanResult } from './clusterization/k-mean';
 import cosineSimilarity from './clusterization/cosine-similarity';
-import { Resume, Vacancy } from '@prisma/client';
+import { Resume, ResumeLanguageLevel, Vacancy, VacancyLanguageLevel } from '@prisma/client';
 import silhouette from './silhouette/silhouette';
+import getRatingScore from './rating-score/rating-score';
 
 async function getAllDocuments(): Promise<Array<IDocument>> {
   let resumes = await ResumeService.getAllDescriptions();
@@ -60,21 +61,18 @@ class Recommendations {
   }
 
   countRatingScore(
-    vacancy: Vacancy,
+    vacancy: Vacancy & { vacancyLanguageLevels: VacancyLanguageLevel[] },
     vacancyIndex: number,
-    resumesDocuments: Array<IProcessedDocument>,
-    resume: Resume,
+    resume: Resume & { resumeLanguageLevels: ResumeLanguageLevel[] },
   ) {
     const vectorVacancy = this.termDocumentMatrix[vacancyIndex];
-    // const resumeDocument = resumesDocuments.find((document) => document.id === resume.id);
     const resumeDocumentIndex = this.documents.findIndex(
       (document) => document.id === resume.id && document.type === RESUME,
     );
     const vectorResume = this.termDocumentMatrix[resumeDocumentIndex];
-
     const cosSimilarity = 1 - cosineSimilarity(vectorVacancy, vectorResume);
 
-    return cosSimilarity;
+    return getRatingScore(vacancy, resume, cosSimilarity);
   }
 
   async getRecommendatedResumes(vacancyId: number) {
@@ -92,14 +90,20 @@ class Recommendations {
       return this.documents[vacancyIndex].recommendatedResumes;
     }
 
-    const vacancy = await VacancyService.findOneOrThrow(this.documents[vacancyIndex].id);
+    const vacancy = await VacancyService.findOneWithLanguagesOrThrow(
+      this.documents[vacancyIndex].id,
+    );
 
-    const resumesDocuments = this.getRecommendatedResumesDocuments(vacancyIndex);
+    const resumesDocuments = this.getRecommendatedResumesDocuments(vacancyIndex); //?
     const resumesIds = resumesDocuments.map((document) => document.id);
-    const resumes = await ResumeService.getAllResumesById(resumesIds);
+    const resumes = await ResumeService.getResumesForRecommendationById(
+      resumesIds,
+      vacancy.place_id,
+      vacancy.online,
+    );
 
     const recommendatedResumes = resumes.map((resume) => {
-      const ratingScore = this.countRatingScore(vacancy, vacancyIndex, resumesDocuments, resume);
+      const ratingScore = this.countRatingScore(vacancy, vacancyIndex, resume);
       return {
         id: resume.id,
         ratingScore: ratingScore,
