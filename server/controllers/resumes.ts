@@ -6,7 +6,6 @@ import recommendations from '../recommendation/recommendation';
 import { RESUME } from '../consts/const';
 import { User, Language } from '@prisma/client';
 import { getPageOptions } from '../utils/query-options';
-import ClientError from '../types/error';
 
 const resume = prisma.resume;
 const resumeLanguageLevel = prisma.resumeLanguageLevel;
