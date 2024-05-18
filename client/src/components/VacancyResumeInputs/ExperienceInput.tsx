@@ -1,4 +1,4 @@
-import { FormControl, FormErrorMessage, FormLabel, Input, Checkbox, Box } from '@chakra-ui/react';
+import { FormControl, FormErrorMessage, FormLabel, Input, Checkbox } from '@chakra-ui/react';
 import { useState } from 'react';
 import type { FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 import type { ChangeEvent } from 'react';
@@ -40,7 +40,7 @@ const ExperienceInput = ({ errors, register, setValue, experience }: IProps) => 
   };
 
   return (
-    <Box>
+    <>
       <FormControl isInvalid={!!errors.experience}>
         <FormLabel htmlFor="experience">Роки досвіду роботи</FormLabel>
         {!isWithoutExpirience && (
@@ -50,22 +50,16 @@ const ExperienceInput = ({ errors, register, setValue, experience }: IProps) => 
               type="number"
               step="1"
               focusBorderColor="green.600"
-              marginTop="10px"
               {...register('experience', { valueAsNumber: true })}
             />
             <FormErrorMessage>{errors.experience?.message}</FormErrorMessage>
           </>
         )}
       </FormControl>
-      <Checkbox
-        value="withoutExpirience"
-        onChange={onCheckboxChange}
-        defaultChecked={getIsWithoutExpirience()}
-        marginTop="10px"
-      >
+      <Checkbox value="withoutExpirience" onChange={onCheckboxChange} defaultChecked={getIsWithoutExpirience()}>
         Без досвіду роботи
       </Checkbox>
-    </Box>
+    </>
   );
 };
 
