@@ -15,7 +15,7 @@ import {
 import { Link as ReactRouterLink } from 'react-router-dom';
 import {
   getFormattedSalary,
-  getExpirienceStr,
+  getExpirienceStrResume,
   getOnlineStr,
   educationTranslation,
   contractTranslation,
@@ -66,7 +66,7 @@ const ResumeCard = ({ resume }: Props) => {
                 <Text color="green.800">{resume.address}</Text>
               </GridItem>
               <GridItem colSpan={1}>
-                <Text color="green.800">{getExpirienceStr(resume.experience)}</Text>
+                <Text color="green.800">{getExpirienceStrResume(resume.experience)}</Text>
               </GridItem>
               <GridItem colSpan={1}>
                 <Text color="green.800">{educationTranslation[resume.education]}</Text>

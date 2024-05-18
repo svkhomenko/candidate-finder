@@ -20,7 +20,7 @@ function getFormattedSalary(salaryMin: number, salaryMax: number) {
   return sMin + ' - ' + sMax;
 }
 
-function getYearWord(years: number) {
+function getYearWordVacancy(years: number) {
   let strYears = String(years);
   if (strYears.at(-1) === '1' && years !== 11) {
     return 'року';
@@ -28,11 +28,29 @@ function getYearWord(years: number) {
   return 'років';
 }
 
-function getExpirienceStr(experience: number) {
+function getExpirienceStrVacancy(experience: number) {
   if (experience === 0) {
     return 'Без досвіду роботи';
   }
-  return `Досвід роботи від ${experience} ${getYearWord(experience)}`;
+  return `Досвід роботи від ${experience} ${getYearWordVacancy(experience)}`;
+}
+
+function getYearWordResume(years: number) {
+  let strYears = String(years);
+  if (strYears.at(-1) === '1' && years !== 11) {
+    return 'рік';
+  }
+  if (['2', '3', '4'].includes(String(strYears.at(-1)))) {
+    return 'роки';
+  }
+  return 'років';
+}
+
+function getExpirienceStrResume(experience: number) {
+  if (experience === 0) {
+    return 'Без досвіду роботи';
+  }
+  return `Досвід роботи ${experience} ${getYearWordResume(experience)}`;
 }
 
 function getOnlineStr(online: boolean) {
@@ -270,8 +288,10 @@ const languageTranslation = {
 export {
   capitalizeFirstLetter,
   getFormattedSalary,
-  getYearWord,
-  getExpirienceStr,
+  getYearWordVacancy,
+  getExpirienceStrVacancy,
+  getYearWordResume,
+  getExpirienceStrResume,
   getOnlineStr,
   getFormattedRatingScore,
   educationTranslation,

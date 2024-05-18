@@ -5,7 +5,7 @@ import { useGetResumeQuery } from '~/store/api/resume-slice';
 import { useAppSelector } from '~/hooks/use-app-selector';
 import {
   getFormattedSalary,
-  getExpirienceStr,
+  getExpirienceStrResume,
   educationTranslation,
   contractTranslation,
   getOnlineStr,
@@ -66,7 +66,7 @@ const ResumePage = () => {
               <Stack spacing="3">
                 <Text color="green.800">{getFormattedSalary(resume.salaryMin, resume.salaryMax)} грн</Text>
                 <Text color="green.800">{resume.address}</Text>
-                <Text color="green.800">{getExpirienceStr(resume.experience)}</Text>
+                <Text color="green.800">{getExpirienceStrResume(resume.experience)}</Text>
                 <Text color="green.800">{educationTranslation[resume.education]}</Text>
                 <Text color="green.800">{contractTranslation[resume.contract]}</Text>
                 <Text color="green.800">{getOnlineStr(resume.online)}</Text>

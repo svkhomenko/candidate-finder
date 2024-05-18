@@ -5,7 +5,7 @@ import { useGetVacancyQuery } from '~/store/api/vacancy-slice';
 import { useAppSelector } from '~/hooks/use-app-selector';
 import {
   getFormattedSalary,
-  getExpirienceStr,
+  getExpirienceStrVacancy,
   educationTranslation,
   contractTranslation,
   getOnlineStr,
@@ -68,7 +68,7 @@ const VacancyPage = () => {
                 <Stack spacing="3">
                   <Text color="green.800">{getFormattedSalary(vacancy.salaryMin, vacancy.salaryMax)} грн</Text>
                   <Text color="green.800">{vacancy.address}</Text>
-                  <Text color="green.800">{getExpirienceStr(vacancy.experience)}</Text>
+                  <Text color="green.800">{getExpirienceStrVacancy(vacancy.experience)}</Text>
                   <Text color="green.800">{educationTranslation[vacancy.education]}</Text>
                   <Text color="green.800">{contractTranslation[vacancy.contract]}</Text>
                   <Text color="green.800">{getOnlineStr(vacancy.online)}</Text>

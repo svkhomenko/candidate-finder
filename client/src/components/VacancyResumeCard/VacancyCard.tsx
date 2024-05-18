@@ -2,7 +2,7 @@ import { Card, CardBody, Stack, Heading, Text, CardProps, Grid, GridItem } from 
 import { Link as ReactRouterLink } from 'react-router-dom';
 import {
   getFormattedSalary,
-  getExpirienceStr,
+  getExpirienceStrVacancy,
   getOnlineStr,
   educationTranslation,
   contractTranslation,
@@ -32,7 +32,7 @@ const VacancyCard = ({ vacancy }: Props) => {
                 <Text color="green.800">{vacancy.address}</Text>
               </GridItem>
               <GridItem colSpan={1}>
-                <Text color="green.800">{getExpirienceStr(vacancy.experience)}</Text>
+                <Text color="green.800">{getExpirienceStrVacancy(vacancy.experience)}</Text>
               </GridItem>
               <GridItem colSpan={1}>
                 <Text color="green.800">{educationTranslation[vacancy.education]}</Text>
