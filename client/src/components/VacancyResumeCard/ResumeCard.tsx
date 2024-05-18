@@ -49,7 +49,7 @@ const ResumeCard = ({ resume }: Props) => {
             {isRecResume && resume.badges.length && (
               <Wrap>
                 {resume.badges.map((badge) => (
-                  <WrapItem>
+                  <WrapItem key={badge}>
                     <Tag variant="outline" width="fit-content" colorScheme="green">
                       {badge}
                     </Tag>
