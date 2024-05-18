@@ -141,7 +141,6 @@ enum Language {
   cy 
   da 
   de 
-  div 
   dv 
   dz 
   ee 
@@ -178,17 +177,14 @@ enum Language {
   ie 
   ig 
   ii 
-  ik 
-  in 
+  ik  
   io 
   is 
   it 
   iu 
   iw 
-  ja 
   ji 
   jv 
-  jw 
   ka 
   kg 
   ki 
@@ -205,14 +201,12 @@ enum Language {
   kv 
   kw 
   ky 
-  kz 
   la 
   lb 
   lg 
   li 
   ln 
   lo 
-  ls 
   lt 
   lu 
   lv 
@@ -294,7 +288,6 @@ enum Language {
   ug 
   uk 
   ur 
-  us 
   uz 
   ve 
   vi 
