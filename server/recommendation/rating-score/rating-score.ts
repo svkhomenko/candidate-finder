@@ -8,6 +8,7 @@ import {
 } from '@prisma/client';
 import weightingCoefficients from './weighting-coefficients';
 import { educationTranslation, levelTranslation, contractTranslation } from './helpers';
+import getBadges from './badges';
 
 function getSalaryScore(salaryMaxVacancy: number, salaryMinResume: number) {
   return salaryMaxVacancy >= salaryMinResume ? 1 : 0;
@@ -26,23 +27,30 @@ function getLanguagesScore(
   languagesResume: ResumeLanguageLevel[],
 ) {
   let sum = 0;
+  let commonLanguages = [];
 
   languagesVacancy.forEach((langLevelVacancy) => {
     let langLevelResume = languagesResume.find((ll) => ll.language === langLevelVacancy.language);
-    if (langLevelResume) {
-      sum +=
-        levelTranslation[langLevelVacancy.level] <= levelTranslation[langLevelResume.level] ? 1 : 0;
+    if (
+      langLevelResume &&
+      levelTranslation[langLevelVacancy.level] <= levelTranslation[langLevelResume.level]
+    ) {
+      sum += 1;
+      commonLanguages.push(langLevelResume.language);
     }
   });
 
-  return languagesVacancy.length ? sum / languagesVacancy.length : 1;
+  return {
+    languagesScore: languagesVacancy.length ? sum / languagesVacancy.length : 1,
+    commonLanguages,
+  };
 }
 
 function getContractScore(contractVacancy: Contract, contractResume: Contract) {
   return contractTranslation[contractVacancy].includes(contractResume) ? 1 : 0;
 }
 
-export default function getRatingScore(
+export default function getRatingScoreAndBadges(
   vacancy: Vacancy & { vacancyLanguageLevels: VacancyLanguageLevel[] },
   resume: Resume & { resumeLanguageLevels: ResumeLanguageLevel[] },
   cosSimilarity: number,
@@ -54,19 +62,34 @@ export default function getRatingScore(
     weightingCoefficients.EXPERIENCE * getExperienceScore(vacancy.experience, resume.experience);
   let educationScore =
     weightingCoefficients.EDUCATION * getEducationScore(vacancy.education, resume.education);
-  let languagesScore =
-    weightingCoefficients.LANGUAGES *
-    getLanguagesScore(vacancy.vacancyLanguageLevels, resume.resumeLanguageLevels);
+
+  let languagesResult = getLanguagesScore(
+    vacancy.vacancyLanguageLevels,
+    resume.resumeLanguageLevels,
+  );
+  let languagesScore = weightingCoefficients.LANGUAGES * languagesResult.languagesScore;
+
   let contractScore =
     weightingCoefficients.CONTRACT * getContractScore(vacancy.contract, resume.contract);
 
-  return (
+  const ratingScore =
     (cosSimilarityScore +
       salaryScore +
       experienceScore +
       educationScore +
       languagesScore +
       contractScore) /
-    weightingCoefficients.SUM
-  );
+    weightingCoefficients.SUM;
+
+  return {
+    ratingScore,
+    badges: getBadges(resume, {
+      cosSimilarity,
+      salaryScore,
+      experienceScore,
+      educationScore,
+      commonLanguages: languagesResult.commonLanguages,
+      contractScore,
+    }),
+  };
 }

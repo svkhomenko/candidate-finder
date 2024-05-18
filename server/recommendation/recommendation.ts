@@ -8,7 +8,7 @@ import { IKmeanResult } from './clusterization/k-mean';
 import cosineSimilarity from './clusterization/cosine-similarity';
 import { Resume, ResumeLanguageLevel, Vacancy, VacancyLanguageLevel } from '@prisma/client';
 import silhouette from './silhouette/silhouette';
-import getRatingScore from './rating-score/rating-score';
+import getRatingScoreAndBadges from './rating-score/rating-score';
 
 async function getAllDocuments(): Promise<Array<IDocument>> {
   let resumes = await ResumeService.getAllDescriptions();
@@ -60,8 +60,7 @@ class Recommendations {
     return resumesDocuments;
   }
 
-  countRatingScore(
-    vacancy: Vacancy & { vacancyLanguageLevels: VacancyLanguageLevel[] },
+  countCosSimilarity(
     vacancyIndex: number,
     resume: Resume & { resumeLanguageLevels: ResumeLanguageLevel[] },
   ) {
@@ -70,9 +69,7 @@ class Recommendations {
       (document) => document.id === resume.id && document.type === RESUME,
     );
     const vectorResume = this.termDocumentMatrix[resumeDocumentIndex];
-    const cosSimilarity = 1 - cosineSimilarity(vectorVacancy, vectorResume);
-
-    return getRatingScore(vacancy, resume, cosSimilarity);
+    return 1 - cosineSimilarity(vectorVacancy, vectorResume);
   }
 
   async getRecommendatedResumes(vacancyId: number) {
@@ -94,7 +91,7 @@ class Recommendations {
       this.documents[vacancyIndex].id,
     );
 
-    const resumesDocuments = this.getRecommendatedResumesDocuments(vacancyIndex); //?
+    const resumesDocuments = this.getRecommendatedResumesDocuments(vacancyIndex);
     const resumesIds = resumesDocuments.map((document) => document.id);
     const resumes = await ResumeService.getResumesForRecommendationById(
       resumesIds,
@@ -103,11 +100,12 @@ class Recommendations {
     );
 
     const recommendatedResumes = resumes.map((resume) => {
-      const ratingScore = this.countRatingScore(vacancy, vacancyIndex, resume);
+      const cosSimilarity = this.countCosSimilarity(vacancyIndex, resume);
+      const { ratingScore, badges } = getRatingScoreAndBadges(vacancy, resume, cosSimilarity);
       return {
         id: resume.id,
         ratingScore: ratingScore,
-        badges: [],
+        badges: badges,
       };
     });
 
