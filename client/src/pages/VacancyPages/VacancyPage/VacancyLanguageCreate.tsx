@@ -53,7 +53,7 @@ const VacancyLanguageCreate = () => {
 
   return (
     <>
-      <HStack justifyContent="end" padding="10px">
+      <HStack justifyContent="end">
         <Button leftIcon={<IoIosAddCircleOutline />} onClick={onOpen} variant="outline">
           Додати мову
         </Button>
