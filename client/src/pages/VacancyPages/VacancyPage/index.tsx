@@ -14,6 +14,7 @@ import UpdateVacancy from './UpdateVacancy';
 import DeleteVacancy from './DeleteVacancy';
 import VacancyLanguages from './VacancyLanguages';
 import RecommendatedResumes from './RecommendatedResumes';
+import VacancyResumeUser from '~/components/VacancyResumeUser';
 import Layout from '~/components/Layout';
 import PageAlert from '~/components/PageAlert';
 import Loader from '~/components/Loader';
@@ -47,7 +48,7 @@ const VacancyPage = () => {
         <>
           <Layout>
             <Card sx={styles.card} variant="outline">
-              <CardHeader>
+              <CardHeader paddingBottom="0">
                 <Flex flexDir="row">
                   <Heading mt="4" size="lg" flexGrow="1">
                     {vacancy.title}
@@ -78,6 +79,8 @@ const VacancyPage = () => {
                   <Text whiteSpace="pre-line">{vacancy.description}</Text>
 
                   <VacancyLanguages isCurUser={Number(user.id) === vacancy.userId} />
+
+                  <VacancyResumeUser userId={vacancy.userId} />
                 </Stack>
               </CardBody>
             </Card>

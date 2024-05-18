@@ -13,6 +13,7 @@ import {
 import UpdateResume from './UpdateResume';
 import DeleteResume from './DeleteResume';
 import ResumeLanguages from './ResumeLanguages';
+import VacancyResumeUser from '~/components/VacancyResumeUser';
 import Layout from '~/components/Layout';
 import PageAlert from '~/components/PageAlert';
 import Loader from '~/components/Loader';
@@ -45,7 +46,7 @@ const ResumePage = () => {
       ) : (
         <Layout>
           <Card sx={styles.card} variant="outline">
-            <CardHeader>
+            <CardHeader paddingBottom="0">
               <Flex flexDir="row">
                 <Heading mt="4" size="lg" flexGrow="1">
                   {resume.title}
@@ -76,6 +77,8 @@ const ResumePage = () => {
                 <Text whiteSpace="pre-line">{resume.description}</Text>
 
                 <ResumeLanguages isCurUser={Number(user.id) === resume.userId} />
+
+                <VacancyResumeUser userId={resume.userId} />
               </Stack>
             </CardBody>
           </Card>
