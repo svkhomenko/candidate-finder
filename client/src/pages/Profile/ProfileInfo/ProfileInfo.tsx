@@ -10,7 +10,6 @@ import {
   HStack,
   Stack,
   StackDivider,
-  Text,
   Wrap,
   Link,
 } from '@chakra-ui/react';
@@ -28,30 +27,26 @@ const ProfileInfo = ({ setIsEdit }: IProps) => {
 
   return (
     <Card sx={styles.card} variant="outline">
-      <CardHeader>
-        <Flex flexDir="row">
-          <Flex flexDir="column" flexGrow="1">
-            <Heading mt="4" size="lg">
-              {user.fullName}
-            </Heading>
-          </Flex>
-          <Flex>
-            <Button onClick={() => setIsEdit(true)} leftIcon={<Icon as={FiEdit} />}>
-              Редагувати
-            </Button>
-          </Flex>
+      <CardHeader pb="1">
+        <Flex flexDir="row" alignItems="center">
+          <Heading size="lg" flexGrow="1">
+            {user.fullName}
+          </Heading>
+          <Button onClick={() => setIsEdit(true)} leftIcon={<Icon as={FiEdit} />}>
+            Редагувати
+          </Button>
         </Flex>
       </CardHeader>
 
       <CardBody>
         <Stack divider={<StackDivider />} spacing="4">
           <HStack divider={<StackDivider />} spacing="4">
-            <Text fontSize="md" colorScheme="gray">
-              {`${user.email}`}
-            </Text>
-            <Text fontSize="md" colorScheme="gray">
-              {`${user.phoneNumber}`}
-            </Text>
+            <Link fontSize="md" href={`mailto:${user.email}`}>
+              {user.email}
+            </Link>
+            <Link fontSize="md" href={`tel:${user.phoneNumber}`}>
+              {user.phoneNumber}
+            </Link>
           </HStack>
           <Box>
             {user.role === HR ? (
@@ -64,12 +59,10 @@ const ProfileInfo = ({ setIsEdit }: IProps) => {
               </Link>
             )}
           </Box>
-          <Box>
-            <Wrap mt="4" spacing="4">
-              <Logout />
-              <DeleteProfile />
-            </Wrap>
-          </Box>
+          <Wrap spacing="4">
+            <Logout />
+            <DeleteProfile />
+          </Wrap>
         </Stack>
       </CardBody>
     </Card>
