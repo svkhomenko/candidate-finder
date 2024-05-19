@@ -19,7 +19,11 @@ type ReduceFunction = (
   interDist: Vector;
 };
 
-function silhouetteSamples(data: Vectors, labels: Vector, reduceFunction: ReduceFunction): Vector {
+export function silhouetteSamples(
+  data: Vectors,
+  labels: Vector,
+  reduceFunction: ReduceFunction,
+): Vector {
   let labelsFreq = countFreq(labels);
   let samples = reduceFunction(data, labels, labelsFreq);
   let denom = labels.map((val) => labelsFreq[val] - 1);
@@ -30,7 +34,7 @@ function silhouetteSamples(data: Vectors, labels: Vector, reduceFunction: Reduce
     .map((val, ind) => val / Math.max(intra[ind], inter[ind]));
 }
 
-function countFreq(arr: Vector): Vector {
+export function countFreq(arr: Vector): Vector {
   let valid = arr.every((val) => {
     if (typeof val !== 'number') return false;
     return val >= 0.0 && Math.floor(val) === val && val !== Infinity;
@@ -44,7 +48,7 @@ function countFreq(arr: Vector): Vector {
   return result;
 }
 
-const silhouetteReduce: ReduceFunction = (dataChunk, labels, labelFrequencies) => {
+export const silhouetteReduce: ReduceFunction = (dataChunk, labels, labelFrequencies) => {
   let clusterDistances = dataChunk.map((row) =>
     labelFrequencies.map((_, mInd) =>
       labels.reduce(

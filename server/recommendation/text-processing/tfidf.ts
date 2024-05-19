@@ -85,4 +85,9 @@ const getTermDocumentMatrix = (documents: Array<IProcessedDocument>) => {
 
 export default {
   getTermDocumentMatrix,
+  filterNullVectors,
+  countIDFObject,
+  countIDF,
+  countTF,
+  getWordSet,
 };

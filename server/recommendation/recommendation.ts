@@ -6,7 +6,7 @@ import { RESUME, VACANCY } from '../consts/const';
 import { IDocument, IProcessedDocument, IDocumentType } from './types';
 import { IKmeanResult } from './clusterization/k-mean';
 import cosineSimilarity from './clusterization/cosine-similarity';
-import { Resume, ResumeLanguageLevel, Vacancy, VacancyLanguageLevel } from '@prisma/client';
+import { Resume, ResumeLanguageLevel, Vacancy } from '@prisma/client';
 import silhouette from './silhouette/silhouette';
 import getRatingScoreAndBadges from './rating-score/rating-score';
 
@@ -26,7 +26,7 @@ async function getAllDocuments(): Promise<Array<IDocument>> {
   return [...typedResumes, ...typedVacancies];
 }
 
-class Recommendations {
+export class Recommendations {
   documents: Array<IProcessedDocument>;
   termDocumentMatrix: Array<Array<number>>;
   kmeansResult: IKmeanResult;

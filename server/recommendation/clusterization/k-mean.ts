@@ -16,7 +16,7 @@ export type IKmeanResult = {
 const MAX_ITERATIONS = 1000;
 
 // K-means++ initial centroid selection
-function k_means_pp(data: Vectors, k: number): Centroids {
+export function k_means_pp(data: Vectors, k: number): Centroids {
   if (data.length === k) {
     return data;
   }
@@ -71,7 +71,7 @@ function k_means_pp(data: Vectors, k: number): Centroids {
   return cents;
 }
 
-function getClusterIndexes(data: UniMultiDimensionalArray, cents: Centroids) {
+export function getClusterIndexes(data: UniMultiDimensionalArray, cents: Centroids) {
   let clusterIndexes: Array<number> = [];
 
   for (let i = 0; i < data.length; i++) {
@@ -92,7 +92,7 @@ function getClusterIndexes(data: UniMultiDimensionalArray, cents: Centroids) {
   return clusterIndexes;
 }
 
-function getNewCents(
+export function getNewCents(
   data: UniMultiDimensionalArray,
   cents: Centroids,
   clusterIndexes: Array<number>,
