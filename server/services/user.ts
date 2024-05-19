@@ -78,14 +78,6 @@ const UserService = {
 
     return { isConfirmed };
   },
-
-  // async update(id: number, data: IUser) {
-  //   if (data.email) {
-  //     await UserService.checkFor('email', data.email, id);
-  //   }
-
-  //   await user.update({ where: { id }, data });
-  // },
 };
 
 export default UserService;
