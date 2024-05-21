@@ -6,6 +6,7 @@ const styles: StylesType = {
   card: {
     width: { base: '90%', md: '80%', xl: '65%' },
     margin: '0 auto',
+    maxW: '700px',
     boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 50px;',
   },
   heading: {

@@ -96,14 +96,7 @@ const ResumeCreate = () => {
 
               <ContractInput errors={errors} setValue={setValue} />
 
-              <Button
-                type="submit"
-                w="200px"
-                colorScheme="green"
-                isLoading={isLoading}
-                spinnerPlacement="end"
-                loadingText="Submitting"
-              >
+              <Button type="submit" w="200px" colorScheme="green" isLoading={isLoading} alignSelf="center">
                 Створити
               </Button>
             </VStack>

@@ -115,7 +115,7 @@ const UpdateVacancy = ({ vacancy, setIsEdit }: IProps) => {
 
               <ContractInput errors={errors} setValue={setValue} contract={vacancy.contract} />
 
-              <Button type="submit" w="200px" colorScheme="green" isLoading={isLoading}>
+              <Button type="submit" w="200px" colorScheme="green" isLoading={isLoading} alignSelf="center">
                 Зберегти
               </Button>
             </VStack>

@@ -67,7 +67,7 @@ const VacancyLanguageUpdate = ({ languageLevel, setIsEdit }: IProps) => {
             <FormErrorMessage>{errors.level?.message}</FormErrorMessage>
           </FormControl>
 
-          <Button type="submit" w="200px" colorScheme="green" isLoading={isLoading}>
+          <Button type="submit" w="200px" colorScheme="green" isLoading={isLoading} alignSelf="center">
             Зберегти
           </Button>
         </VStack>
