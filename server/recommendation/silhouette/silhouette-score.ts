@@ -29,9 +29,13 @@ export function silhouetteSamples(
   let denom = labels.map((val) => labelsFreq[val] - 1);
   let intra = samples.intraDist.map((val, ind) => (denom[ind] ? val / denom[ind] : 0));
   let inter = samples.interDist;
-  return inter
-    .map((val, ind) => val - intra[ind])
-    .map((val, ind) => val / Math.max(intra[ind], inter[ind]));
+
+  return inter.map((val, ind) => {
+    if (labels.findIndex((label, index) => label === labels[ind] && index !== ind) !== -1) {
+      return (val - intra[ind]) / Math.max(val, intra[ind]);
+    }
+    return 0;
+  });
 }
 
 export function countFreq(arr: Vector): Vector {
